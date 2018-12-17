@@ -1,17 +1,22 @@
 package main
 
 import (
+	"fmt"
+	"github.com/Jeffail/tunny"
+	"gotest/leedcode"
 	"io/ioutil"
 	"net/http"
+	"os"
 	"runtime"
-
-	"github.com/Jeffail/tunny"
 )
 
 func main() {
+	s := "(()()"
+	fmt.Println(leedcode.LongestValidParentheses(s))
+	os.Exit(0)
 	numCPUs := runtime.NumCPU()
 
-	pool := tunny.NewFunc(numCPUs, func(payload interface{}) interface{} { //创建一个工作池
+	pool := tunny.NewFunc(numCPUs, func(payload interface{}) interface{} {
 		var result []byte
 
 		// TODO: Something CPU heavy with payload
@@ -30,10 +35,6 @@ func main() {
 		// Funnel this work into our pool. This call is synchronous and will
 		// block until the job is completed.
 		result := pool.Process(input)
-		/*result, err := pool.ProcessTimed(input, time.Second*5)
-		if err == tunny.ErrJobTimedOut {
-			http.Error(w, "Request timed out", http.StatusRequestTimeout)
-		}*/
 
 		w.Write(result.([]byte))
 	})

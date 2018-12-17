@@ -69,7 +69,7 @@ func backTracking(ret *[][]int, k int, n int, tmp []int, sum int) {
 	}
 }
 
-//289 生命游戏,本次算法
+//289 生命游戏,本地算法
 func GameOfLife(board [][]int) {
 	row := len(board)
 	column := len(board[0])
@@ -214,6 +214,3 @@ func MajorityElement(nums []int) []int {
 }
 
 //85
-func maximalRectangle(matrix [][]byte) int {
-
-}
