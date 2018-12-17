@@ -1,7 +1,5 @@
 package leedcode
 
-import "fmt"
-
 // 构造数据结构，
 type NumArray struct {
 	sums []int
@@ -95,6 +93,7 @@ func CountNumbersWithUniqueDigits(n int) int {
 
 //30 用数组当做栈,go的字符类型,判断的时机不一样,数组的截取
 //位置记录代表着全程的扩充过程，通过位置可以实际计算扩充过程
+//动态规划应该怎么做？
 func LongestValidParentheses(s string) int {
 	length := len(s)
 	if length < 1 {
@@ -113,15 +112,13 @@ func LongestValidParentheses(s string) int {
 			if tmp == 0 {
 				index = i + 1
 			} else {
-				top := bracket[tmp-1]
 				tmp--
 				if tmp == 0 {
 					ret = max(ret, i-index+1)
 				} else {
-					ret = max(ret, i-top+1)
+					ret = max(ret, i-bracket[tmp-1])
 				}
 				bracket = bracket[:tmp]
-				fmt.Println(bracket)
 			}
 			break
 		}
