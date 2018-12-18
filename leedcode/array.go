@@ -213,4 +213,17 @@ func MajorityElement(nums []int) []int {
 	return ret
 }
 
-//85
+//37 数独，只能回溯算法了
+func solveSudoku(board [][]byte) {
+	if len(board) != 9 || len(board[0]) != 9 {
+		return
+	}
+	for i := 1; i <= 9; i++ {
+
+	}
+}
+
+//判断有效数字
+func checkValid() {
+
+}

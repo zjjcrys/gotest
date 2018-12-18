@@ -1,9 +1,7 @@
 package main
 
 import (
-	"fmt"
 	"github.com/Jeffail/tunny"
-	"gotest/leedcode"
 	"io/ioutil"
 	"net/http"
 	"os"
@@ -11,8 +9,7 @@ import (
 )
 
 func main() {
-	s := "(()()"
-	fmt.Println(leedcode.LongestValidParentheses(s))
+
 	os.Exit(0)
 	numCPUs := runtime.NumCPU()
 
