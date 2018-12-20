@@ -1,5 +1,7 @@
 package leedcode
 
+import "fmt"
+
 // make 和 []int的不同
 func SortArrayByParity(A []int) []int {
 	length := len(A)
@@ -213,17 +215,86 @@ func MajorityElement(nums []int) []int {
 	return ret
 }
 
-//37 数独，只能回溯算法了
+//37 数独，只能回溯算法了，byte 和int 不同，加引号和不加引号不同
+//优化方法，优化比较次数，利用空间存储
 func solveSudoku(board [][]byte) {
 	if len(board) != 9 || len(board[0]) != 9 {
 		return
 	}
-	for i := 1; i <= 9; i++ {
+	sudoKu(board, 0, 0)
+	fmt.Println(board)
+}
+func sudoKu(board [][]byte, row int, col int) bool {
+	if row == 9 {
+		return true
+	}
+
+	var i byte
+	for i = '1'; i <= '9'; i++ {
+		if (board)[row][col] == '.' {
+			if !checkValid(board, row, col, i) {
+				continue
+			}
+			(board)[row][col] = i
+			newRow := row
+			newCol := col + 1
+			if newCol == 9 {
+				newRow++
+				newCol = 0
+			}
+			if sudoKu(board, newRow, newCol) {
+				return true
+			}
+			(board)[row][col] = '.'
+		} else {
+			newRow := row
+			newCol := col + 1
+			if newCol == 9 {
+				newRow++
+				newCol = 0
+			}
+			if sudoKu(board, newRow, newCol) {
+				return true
+			}
+			break
+		}
 
 	}
+	return false
 }
 
-//判断有效数字
-func checkValid() {
-
+//判断当前放的值是不是有效
+func checkValid(board [][]byte, row int, col int, val byte) bool {
+	//判断列
+	for i := 0; i < 9; i++ {
+		if i == row {
+			continue
+		}
+		if board[i][col] == val {
+			return false
+		}
+	}
+	//判断行
+	for j := 0; j < 9; j++ {
+		if j == col {
+			continue
+		}
+		if board[row][j] == val {
+			return false
+		}
+	}
+	//判断3*3宫格
+	gridRow := (row / 3) * 3
+	gridCol := (col / 3) * 3
+	for i := gridRow; i < gridRow+3; i++ {
+		for j := gridCol; j < gridCol+3; j++ {
+			if i == row && j == col {
+				continue
+			}
+			if board[i][j] == val {
+				return false
+			}
+		}
+	}
+	return true
 }
