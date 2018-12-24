@@ -1,6 +1,8 @@
 package leedcode
 
-import "fmt"
+import (
+	"fmt"
+)
 
 // make 和 []int的不同
 func SortArrayByParity(A []int) []int {
@@ -297,4 +299,84 @@ func checkValid(board [][]byte, row int, col int, val byte) bool {
 		}
 	}
 	return true
+}
+
+//44 通配符匹配又是回溯题,深度优先遍历,先把情况列举完,超时了，动态规划，找关系
+//程序中直接调用的正则匹配是怎么实现的，底层算法是什么
+//编译原理中涉及到的词法分析树和语法分析数是怎么遍历的
+func isMatch(s string, p string) bool {
+	if s == "" && p == "" {
+		return true
+	}
+	if p == "*" {
+		return true
+	}
+	if s != "" && p != "" {
+		return match(s, p, 0, 0)
+	}
+	return false
+}
+func match(s string, p string, sIndex int, pIndex int) bool {
+	if sIndex >= len(s) {
+		if pIndex >= len(p) {
+			return true
+		}
+		for i := pIndex; i < len(p); i++ {
+			if p[i] != '*' {
+				return false
+			}
+		}
+		return true
+	}
+	if sIndex < len(s) && pIndex >= len(p) {
+		return false
+	}
+
+	if s[sIndex] == p[pIndex] || p[pIndex] == '?' {
+		return match(s, p, sIndex+1, pIndex+1)
+	}
+	if p[pIndex] != '*' && s[sIndex] != p[pIndex] {
+		return false
+	}
+	for i := sIndex; i <= len(s); i++ {
+		if match(s, p, i, pIndex+1) {
+			return true
+		}
+	}
+	return false
+}
+
+//动态规划的解法，如果使用穷举超时，尝试dp优化
+//自己在观念上无法把回溯推导到dp，走不通
+func isMatch2(s string, p string) bool {
+	sLen := len(s)
+	pLen := len(p)
+	ret := make([][]bool, sLen+1)
+	for i := 0; i <= sLen; i++ {
+		ret[i] = make([]bool, pLen+1)
+	}
+	ret[0][0] = true
+	for i := 1; i <= sLen; i++ {
+		ret[i][0] = false
+	}
+	for j := 1; j <= pLen; j++ {
+		if p[j-1] == '*' {
+			ret[0][j] = ret[0][j-1]
+		} else {
+			ret[0][j] = false
+		}
+	}
+	for i := 1; i <= sLen; i++ {
+		for j := 1; j <= pLen; j++ {
+			if s[i-1] == p[j-1] || p[j-1] == '?' {
+				ret[i][j] = ret[i-1][j-1]
+			} else if p[j-1] == '*' {
+				ret[i][j] = ret[i-1][j] || ret[i][j-1]
+			} else {
+				ret[i][j] = false
+			}
+		}
+	}
+
+	return ret[sLen][pLen]
 }

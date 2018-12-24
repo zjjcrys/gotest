@@ -5,9 +5,6 @@ import (
 	"testing"
 )
 
-/*
-test func:go test -v ./libraries/im/*.go -test.run TestSendPush
-*/
 func TestSortArrayByParity(t *testing.T) {
 	s := make([]int, 4)
 	s[0] = 3
@@ -53,4 +50,9 @@ func TestSolveSudoku(t *testing.T) {
 		{'.', '.', '.', 4, 1, 9, '.', '.', 5},
 		{'.', '.', '.', '.', 8, '.', '.', 7, 9}}
 	solveSudoku(board)
+}
+func TestIsMatch(t *testing.T) {
+	s := "ho"
+	p := "ho***"
+	fmt.Println(isMatch2(s, p))
 }
