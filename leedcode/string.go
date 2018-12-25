@@ -62,10 +62,11 @@ func fullJustify(words []string, maxWidth int) []string {
 	return ret
 }
 
-//76
-//两个指针，滑动窗口
-func MinWindow(s string, t string) string {
-	ret := s
+//76 我的问题是在一个循环中即处理left，又处理right，情况太多，只处理right，
+//两个指针，滑动窗口，
+//时间复杂度几乎是排在了最末，如何优化
+func minWindow(s string, t string) string {
+	ret := ""
 	left := 0
 	right := 0
 	str := make(map[byte]int) // 快速取出，用hash存储t字符
@@ -75,43 +76,64 @@ func MinWindow(s string, t string) string {
 		return ""
 	}
 	for i := 0; i < desLen; i++ {
-		str[t[i]] = 1
+		str[t[i]]++
 	}
-	for left < len(s) && right < len(s) && left <= right {
-		if str[s[left]] != 1 {
-			left++
+	for ; right < len(s); right++ {
+		if str[s[right]] == 0 {
 			continue
 		}
-		if str[s[right]] != 1 && len(tmp) != desLen {
-			right++
-			continue
-		}
-		if str[s[right]] == 1 {
-			if tmp[s[right]] > 0 {
-				tmp[s[right]] += 1
-			} else {
-				tmp[s[right]] = 1
+
+		tmp[s[right]]++
+		if equalMap(str, tmp) {
+			if ret == "" || right-left+1 < len(ret) {
+				ret = s[left : right+1]
 			}
-		}
-		if len(tmp) == desLen {
-			tmpRight := right
-			if str[s[right]] != 1 {
-				tmpRight = right - 1
+			if tmp[s[left]] > 1 {
+				tmp[s[left]]--
+			} else {
+				delete(tmp, s[left])
+			}
+			left++
+			//更新left指针
+			for ; left <= right; left++ {
+				if str[s[left]] == 0 {
+					continue
+				}
+				if !equalMap(str, tmp) {
+					break
+				}
+				if equalMap(str, tmp) {
+					if right-left+1 < len(ret) {
+						ret = s[left : right+1]
+					}
+					if tmp[s[left]] > 1 {
+						tmp[s[left]] -= 1
+					} else {
+						delete(tmp, s[left])
+					}
+				}
+
 			}
 
-			if tmpRight-left+1 < len(ret) {
-				ret = s[left : tmpRight+1]
-				if tmp[s[left]] > 1 {
-					tmp[s[left]] -= 1
-				} else {
-					delete(tmp, s[left])
-				}
-			}
-			left++
 		}
-		if str[s[right]] == 1 {
-			right++
+
+	}
+
+	return ret
+}
+func equalMap(map1 map[byte]int, map2 map[byte]int) bool {
+	if len(map1) != len(map2) {
+		return false
+	}
+	for k, v := range map1 {
+		if map2[k] < v {
+			return false
 		}
 	}
-	return ret
+	return true
+}
+
+//87
+func isScramble(s1 string, s2 string) bool {
+	return true
 }
