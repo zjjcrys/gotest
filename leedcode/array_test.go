@@ -56,3 +56,19 @@ func TestIsMatch(t *testing.T) {
 	p := "ho***"
 	fmt.Println(isMatch2(s, p))
 }
+
+func TestLargestRectangleArea(t *testing.T) {
+	p := []int{4, 2, 0, 3, 2, 5}
+	fmt.Println(largestRectangleArea(p))
+}
+
+func TestMaximalRectangle(t *testing.T) {
+	p := [][]byte{
+		{'1', '0', '1', '0', '0'},
+		{'1', '0', '1', '1', '1'},
+		{'1', '1', '1', '1', '1'},
+		{'1', '0', '0', '1', '0'},
+	}
+	fmt.Println(p)
+	fmt.Println(maximalRectangle(p))
+}

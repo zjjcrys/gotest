@@ -383,6 +383,61 @@ func isMatch2(s string, p string) bool {
 
 //85 找不出对应关系，怎么能从子问题推到到解
 //动态规划每一步是最优解吗，二叉树对于为什么能取到最优解
+//首先简化问题，怎么简化 是84问题的递增，把二维转化为一维
 func maximalRectangle(matrix [][]byte) int {
+	ret := 0
+	if len(matrix) < 1 {
+		return ret
+	}
 
+	for i := 1; i < len(matrix); i++ {
+		for j := 0; j < len(matrix[i]); j++ {
+			if matrix[i][j] != '0' {
+				matrix[i][j] = matrix[i-1][j] + 1
+			}
+		}
+	}
+
+	arr := make([][]int, len(matrix))
+	for i := 0; i < len(arr); i++ {
+		arr[i] = make([]int, len(matrix[i]))
+		for j := 0; j < len(matrix[i]); j++ {
+			arr[i][j] = int(matrix[i][j]) - '0'
+
+		}
+	}
+	for i := 0; i < len(arr); i++ {
+		tmp := largestRectangleArea(arr[i])
+		if tmp > ret {
+			ret = tmp
+		}
+	}
+	return ret
+}
+
+//84 都是单调栈的使用
+//https://zhuanlan.zhihu.com/p/26465701 单调栈的使用
+//左边界问题
+func largestRectangleArea(heights []int) int {
+	if len(heights) < 1 {
+		return 0
+	}
+	heights = append(heights, 0)
+	stack := make([]int, 0) //用来做递增栈
+	maxArea := 0
+	for i := 0; i < len(heights); i++ {
+		for len(stack) > 0 && heights[stack[len(stack)-1]] > heights[i] {
+			height := heights[stack[len(stack)-1]]
+			left := 0
+			if len(stack) > 1 {
+				left = stack[len(stack)-2] + 1
+			}
+			if (i-left)*height > maxArea {
+				maxArea = (i - left) * height
+			}
+			stack = stack[:len(stack)-1]
+		}
+		stack = append(stack, i)
+	}
+	return maxArea
 }

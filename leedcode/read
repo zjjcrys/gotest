@@ -8,4 +8,7 @@ go test -v ./gosdk/user/userinfo_test.go -test.run TestGetUserInfoByUid 只测�
 go gdb调试
 go build -gcflags "-N -l"
 
+//动态数组的删除
+CombinationSum3 tmp = tmp[:len(tmp)-1] 重新赋值
+
 
