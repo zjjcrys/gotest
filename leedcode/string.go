@@ -1,5 +1,7 @@
 package leedcode
 
+import "sort"
+
 //68
 //首先确认字符串的行数，然后确认字符串的位置,梳理好逻辑直接做
 func fullJustify(words []string, maxWidth int) []string {
@@ -133,7 +135,45 @@ func equalMap(map1 map[byte]int, map2 map[byte]int) bool {
 	return true
 }
 
-//87
+//87 递归求解，任意分解，两个子节点交换位置，
+//空时返回true，可以交换多次，感觉别人写的代码比我的要顺畅
+type byteSlice []byte
+
+func (s byteSlice) Len() int           { return len(s) }
+func (s byteSlice) Swap(i, j int)      { s[i], s[j] = s[j], s[i] }
+func (s byteSlice) Less(i, j int) bool { return s[i] < s[j] }
+
 func isScramble(s1 string, s2 string) bool {
-	return true
+	if len(s1) != len(s2) {
+		return false
+	}
+	if s1 == s2 {
+		return true
+	}
+	//解决排序时间超时
+	b1 := []byte(s1)
+	b2 := []byte(s2)
+	sort.Sort(byteSlice(b1))
+	sort.Sort(byteSlice(b2))
+	if string(b1) != string(b2) {
+		return false
+	}
+	length := len(s1)
+	for index := 1; index < length; index++ {
+		s11 := s1[0:index]
+		s12 := s1[index:]
+
+		s21 := s2[0:index]
+		s22 := s2[index:]
+
+		if isScramble(s11, s21) && isScramble(s12, s22) {
+			return true
+		}
+		s21 = s2[:length-index]
+		s22 = s2[length-index:]
+		if isScramble(s11, s22) && isScramble(s12, s21) {
+			return true
+		}
+	}
+	return false
 }

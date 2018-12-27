@@ -14,3 +14,8 @@ func TestMinWindow(t *testing.T) {
 	tStr := "ABC"
 	fmt.Println(minWindow(sStr, tStr))
 }
+func TestIsScramble(t *testing.T) {
+	s1 := "ccabcbabcbabbbbcbb"
+	s2 := "bbbbabccccbbbabcba"
+	fmt.Println(isScramble(s1, s2))
+}
