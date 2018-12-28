@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/Jeffail/tunny"
 	"io/ioutil"
 	"net/http"
@@ -9,7 +10,10 @@ import (
 )
 
 func main() {
-
+	//sStr := "acbdbaab"
+	//tStr := "aabd"
+	var left int
+	fmt.Println(left == 0)
 	os.Exit(0)
 	numCPUs := runtime.NumCPU()
 
