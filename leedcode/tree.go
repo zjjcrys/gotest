@@ -44,7 +44,49 @@ func traversal(root *TreeNode, arr *[]*TreeNode, left **TreeNode) {
 	}
 }
 
-//
+//124 最大路径和,竟然这么简单，一个递归就行了
 func maxPathSum(root *TreeNode) int {
+	ret := INT_MIN
+	maxPathTrace(root, &ret)
+	return ret
+}
+func maxPathTrace(root *TreeNode, ret *int) int {
+	left := 0
+	right := 0
+	bigger := 0
+	if root.Left != nil {
+		left = maxPathTrace(root.Left, ret)
+	}
+	if root.Right != nil {
+		right = maxPathTrace(root.Right, ret)
+	}
+
+	if left+right+root.Val > *ret {
+		*ret = left + right + root.Val
+	}
+	if root.Val > *ret {
+		*ret = root.Val
+	}
+	if left+root.Val > *ret {
+		*ret = left + root.Val
+	}
+	if right+root.Val > *ret {
+		*ret = right + root.Val
+	}
+	if left > right {
+		bigger = left
+	} else {
+		bigger = right
+	}
+	if bigger+root.Val > root.Val {
+		return bigger + root.Val
+	} else {
+		return root.Val
+	}
 
 }
+
+//199
+/*func rightSideView(root *TreeNode) []int {
+
+}*/
