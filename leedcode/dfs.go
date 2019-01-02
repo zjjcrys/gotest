@@ -36,3 +36,8 @@ func solveDFS(board *[][]byte, row int, col int) {
 		solveDFS(board, row, col+1)
 	}
 }
+
+//200
+func numIslands(grid [][]byte) int {
+
+}
