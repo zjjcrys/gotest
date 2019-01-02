@@ -16,3 +16,13 @@ func TestRecoverTree(t *testing.T) {
 	recoverTree(root)
 	fmt.Println("--------------------------------after", root, root.Left, root.Left.Right)
 }
+
+func TestRightSideView(t *testing.T) {
+	root := new(TreeNode)
+	root.Val = 1
+	root.Left = new(TreeNode)
+	root.Left.Val = 2
+	root.Left.Right = new(TreeNode)
+	root.Left.Right.Val = 3
+	fmt.Println(rightSideView(root))
+}

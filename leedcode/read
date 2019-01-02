@@ -24,3 +24,7 @@ cat file.txt | tail -n +10 |head -n 1
 awk 'NR == 10' file.txt
 sed -n '10,10p' file.txt
 
+//sql question
+178 用时高
+select Score, (select count(distinct Score) from Scores where Score>=s.Score) Rank from Scores s order by Score desc
+

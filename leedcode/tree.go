@@ -86,7 +86,41 @@ func maxPathTrace(root *TreeNode, ret *int) int {
 
 }
 
-//199
-/*func rightSideView(root *TreeNode) []int {
+//199 广度优先遍历,真的就是这么简单
+func rightSideView(root *TreeNode) []int {
+	record := make([]*TreeNode, 0)
+	current := 1
+	next := 0
+	ret := make([]int, 0)
+	if root == nil {
+		return ret
+	}
 
-}*/
+	record = append(record, root)
+	for len(record) > 0 {
+		tmp := record[0]
+		if tmp.Left != nil {
+			record = append(record, tmp.Left)
+			next++
+		}
+		if tmp.Right != nil {
+			record = append(record, tmp.Right)
+			next++
+		}
+
+		current--
+		if current == 0 {
+			ret = append(ret, tmp.Val)
+			current = next
+			next = 0
+		}
+		if len(record) > 1 {
+			length := len(record)
+			record = record[1:length]
+		} else {
+			break
+		}
+		//fmt.Println(record[0])
+	}
+	return ret
+}

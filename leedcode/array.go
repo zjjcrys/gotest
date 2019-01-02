@@ -441,3 +441,8 @@ func largestRectangleArea(heights []int) int {
 	}
 	return maxArea
 }
+
+//166 分数转为小数的计算方法，如果是循环小数，怎么样才算是尽头
+func fractionToDecimal(numerator int, denominator int) string {
+	return ""
+}
