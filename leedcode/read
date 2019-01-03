@@ -24,10 +24,34 @@ cat file.txt | tail -n +10 |head -n 1
 awk 'NR == 10' file.txt
 sed -n '10,10p' file.txt
 
-194 转置文件
+193 转义字符\
+sed -n -r '/^([0-9]{3}-|\([0-9]{3}\) )[0-9]{3}-[0-9]{4}$/p' file.txt //-r 是正则匹配 -n不打印默认文本
+比如 sed '1p' file.txt 意愿是只想打印一行，不加-n时会打印所有
+[root@5b6ad735f246 leedcode]# cat file.txt
+987-123-4567
+123 456 7890
+(123) 456-7890
+[root@5b6ad735f246 leedcode]# sed -n '1p' file.txt
+987-123-4567
+[root@5b6ad735f246 leedcode]# sed '1p' file.txt
+987-123-4567
+987-123-4567
+123 456 7890
+(123) 456-7890
+grep -P '^(\d{3}-|\(\d{3}\) )\d{3}-\d{4}$' file.txt  // 正则过滤
+grep -n "123" file.txt 查找出现123，并显示行号
 
-192 单词频次记录
 
+194 转置文件 awk 语法
+NR:行号 $0 一行，$1 第一列
+NF:总行数
+awk '{for(i=1;i<=NF;i++)if(NR==1)s[i]=$i;else s[i]=s[i]" "$i} END {for (i=1;s[i]!="";i++)print s[i]}' file.txt
+循环每一行的每一列
+
+192 单词频次记录 sort|uniq -c 排序 awk使用
+sort -r：以相反的顺序来排序
+sort -n:依照数值大小排序
+cat words.txt  | tr -s ' ' '\n'| sort |uniq -c | sort -rn | awk '{print $2, $1}'
 
 //sql question
 177 mysql 变量
