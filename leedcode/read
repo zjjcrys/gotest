@@ -26,7 +26,21 @@ sed -n '10,10p' file.txt
 
 194 转置文件
 
+192 单词频次记录
+
+
 //sql question
+177 mysql 变量
+distinct limit
+使用之前先声明
+Declare M INT;
+set M=N-1;
+
 178 用时高
 select Score, (select count(distinct Score) from Scores where Score>=s.Score) Rank from Scores s order by Score desc
 
+180 连续出现所以使用三张表 左连接 left join on
+select distinct l1.Num as ConsecutiveNums  from Logs l1 left join Logs l2 on l1.Id=l2.Id-1 left join Logs l3 on l2.Id=l3.Id-1 where l1.Num=l2.Num and l2.Num=l3.Num
+
+184 最大的前三个 count<3
+max(Salary)
