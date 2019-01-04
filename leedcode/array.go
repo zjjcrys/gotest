@@ -442,6 +442,69 @@ func largestRectangleArea(heights []int) int {
 	return maxArea
 }
 
+//146 LRU缓存 使用len cap
+//如果存在直接覆盖,并且修改顺序,改为双链表
+//go的双链表如何实现，在生产环境中多个线程访问，如何保证数据的一致性
+type LRUCache struct {
+	link []int
+	hash map[int]int
+	cap  int
+}
+
+/*func Constructor(capacity int) LRUCache {
+	lru := new(LRUCache)
+	if capacity < 1 {
+		return *lru
+	}
+	lru.link = make([]int, 0, capacity)
+	lru.hash = make(map[int]int)
+	lru.cap = capacity
+	return *lru
+}*/
+
+func (this *LRUCache) Get(key int) int {
+	ret := -1
+	if this.hash[key] == 0 {
+		return ret
+	}
+	ret = this.hash[key]
+	index := -1
+	length := len(this.link)
+	for i := 0; i < length; i++ {
+		if this.link[i] == key {
+			index = i
+			break
+		}
+	}
+	if index != -1 && index != length-1 {
+		tmp := this.link[index]
+		for j := index + 1; j < length; j++ {
+			this.link[j-1] = this.link[j]
+		}
+		this.link[length-1] = tmp
+	}
+	return ret
+}
+
+func (this *LRUCache) Put(key int, value int) {
+	var head int
+	if len(this.link) > 0 {
+		head = this.link[0]
+	}
+	if this.hash[key] != 0 {
+		this.hash[key] = value
+		this.Get(key)
+		return
+	}
+
+	if len(this.link) >= this.cap {
+		delete(this.hash, head)
+		this.link = this.link[1:]
+	}
+	this.link = append(this.link, key)
+	this.hash[key] = value
+}
+
 //166 分数转为小数的计算方法，如果是循环小数，怎么样才算是尽头
 func fractionToDecimal(numerator int, denominator int) string {
 	return ""

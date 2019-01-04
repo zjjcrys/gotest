@@ -39,5 +39,5 @@ func solveDFS(board *[][]byte, row int, col int) {
 
 //200
 func numIslands(grid [][]byte) int {
-
+	return 0
 }
