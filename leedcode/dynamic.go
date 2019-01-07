@@ -133,8 +133,26 @@ func max(x int, y int) int {
 	return y
 }
 
-//188
+//188-需要再看一遍
+//但这道题还有个坑，就是如果k的值远大于prices的天数，就是用2的方法
+//https://www.cnblogs.com/ariel-dreamland/p/9166176.html
 func maxProfit(k int, prices []int) int {
+	if len(prices) < 1 {
+		return 0
+	}
+	if k >= len(prices) {
+		return multiDeal(prices)
+	}
+	glo := make([]int, k+1)
+	local := make([]int, k+1)
+	for i := 0; i < len(prices)-1; i++ {
+		diff := prices[i+1] - prices[i]
+		for j := k; j >= 1; j-- {
+			local[j] = max(glo[j-1], local[j]) + diff
+			glo[j] = max(local[j], glo[j])
+		}
+	}
+	return glo[k]
 
 }
 
@@ -159,6 +177,15 @@ func maxProfit1(prices []int) int {
 
 //122 可以多笔交易
 //只要出现差集就卖出买入，这个是贪心算法更贴切
+func multiDeal(prices []int) int {
+	ret := 0
+	for i := 1; i < len(prices); i++ {
+		if prices[i]-prices[i-1] > 0 {
+			ret += prices[i] - prices[i-1]
+		}
+	}
+	return ret
+}
 
 //123 最多两笔交易 如果是连续增加，就要在最高点卖，选择两次的差集
 //把数组分为两个子数组，分别求最大值
