@@ -120,7 +120,6 @@ func rightSideView(root *TreeNode) []int {
 		} else {
 			break
 		}
-		//fmt.Println(record[0])
 	}
 	return ret
 }

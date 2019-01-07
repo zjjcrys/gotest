@@ -132,3 +132,33 @@ func max(x int, y int) int {
 	}
 	return y
 }
+
+//188
+func maxProfit(k int, prices []int) int {
+
+}
+
+//121 最多一笔交易 就是依赖最大和最小之间的差值
+//初始状态0，状态转移max{前i-1天的最大收益，第i天的价格-前i-1天中的最小价格}
+func maxProfit1(prices []int) int {
+	ret := 0
+	if len(prices) < 2 {
+		return ret
+	}
+	min := prices[0]
+	for i := 1; i < len(prices); i++ {
+		if prices[i] < min {
+			min = prices[i]
+		}
+		if prices[i]-min > ret {
+			ret = prices[i] - min
+		}
+	}
+	return ret
+}
+
+//122 可以多笔交易
+//只要出现差集就卖出买入，这个是贪心算法更贴切
+
+//123 最多两笔交易 如果是连续增加，就要在最高点卖，选择两次的差集
+//把数组分为两个子数组，分别求最大值
