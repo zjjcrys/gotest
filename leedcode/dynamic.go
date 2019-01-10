@@ -132,6 +132,12 @@ func max(x int, y int) int {
 	}
 	return y
 }
+func min(x int, y int) int {
+	if x > y {
+		return y
+	}
+	return x
+}
 
 //188-需要再看一遍
 //但这道题还有个坑，就是如果k的值远大于prices的天数，就是用2的方法
@@ -189,3 +195,105 @@ func multiDeal(prices []int) int {
 
 //123 最多两笔交易 如果是连续增加，就要在最高点卖，选择两次的差集
 //把数组分为两个子数组，分别求最大值
+//174 dp：两个条件可以确认下一个状态,从上到下，需要考虑两个记录，从下往上考虑一个记录，好像是一样的
+func calculateMinimumHP(dungeon [][]int) int {
+	row := len(dungeon)
+	if row < 1 {
+		return 0
+	}
+	col := len(dungeon[0])
+	dp := make([][]int, row)
+	for i := 0; i < row; i++ {
+		dp[i] = make([]int, col)
+	}
+	for i := row - 1; i >= 0; i-- {
+		for j := col - 1; j >= 0; j-- {
+			ret := 0
+			if i+1 < row && j+1 < col {
+				ret = min(dp[i+1][j], dp[i][j+1])
+			} else if i+1 < row {
+				ret = dp[i+1][j]
+			} else if j+1 < col {
+				ret = dp[i][j+1]
+			}
+			dp[i][j] = max(0, ret-dungeon[i][j])
+		}
+	}
+	return dp[0][0] + 1
+}
+
+//139 f(i)标识 前面1到i个字符能否被拆分
+func wordBreak1(s string, wordDict []string) bool {
+	if len(s) < 1 || len(wordDict) < 1 {
+		return false
+	}
+	dp := make([]bool, len(s)+1)
+	set := make(map[string]bool, len(wordDict))
+	minLen := len(wordDict[0])
+	maxLen := minLen
+	for i := 0; i < len(wordDict); i++ {
+		set[wordDict[i]] = true
+		if len(wordDict[i]) < minLen {
+			minLen = len(wordDict[i])
+		}
+		if len(wordDict[i]) > maxLen {
+			maxLen = len(wordDict[i])
+		}
+
+	}
+	for i := 0; i < len(s); i++ {
+		for j := 0; j <= i; j++ { //这里可以被优化，根据字符串的长度
+			if i-j > maxLen && i-j < minLen {
+				continue
+			}
+			left := true
+			rig := set[s[j:i+1]]
+			if j != 0 {
+				left = dp[j]
+			}
+			if left && rig {
+				dp[i+1] = true
+				break
+			}
+		}
+	}
+	return dp[len(s)]
+}
+
+//140 先算出字符串是否被拆分，再调用dfs
+func wordBreak(s string, wordDict []string) []string {
+	if len(s) < 1 {
+		return []string{}
+	}
+	sdp := make([][]string, len(s))
+	for i := 0; i < len(s); i++ {
+		sdp[i] = make([]string, 0)
+	}
+	dp := make([]bool, len(s)+1)
+	set := make(map[string]bool, len(wordDict))
+	for i := 0; i < len(wordDict); i++ {
+		set[wordDict[i]] = true
+	}
+	for i := 0; i < len(s); i++ {
+		for j := 0; j <= i; j++ {
+			left := true
+			sub := s[j : i+1]
+			rig := set[sub]
+			if j != 0 {
+				left = dp[j]
+			}
+			if left && rig {
+				dp[i+1] = true
+				if len(sdp[j]) == 0 {
+					sdp[i] = append(sdp[i], sub)
+					continue
+				}
+				for k := 0; k < len(sdp[j]); k++ {
+					sdp[i] = append(sdp[i], sdp[j][k]+" "+s[j:i+1])
+				}
+
+			}
+		}
+	}
+	return sdp[len(s)-1]
+}

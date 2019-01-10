@@ -74,14 +74,34 @@ func findLadders(beginWord string, endWord string, wordList []string) [][]string
 	queue = append(queue, beginWord)
 
 	str := make([]string, 0)
-	laddersBackTracking(queue, wSet, &ret, str)
+	laddersBackTracking(queue, wSet, &ret, str, endWord)
 	return ret
 }
 
-func laddersBackTracking(queue []string, set map[string]int, ret *[][]string, str []string) {
+func laddersBackTracking(queue []string, wSet map[string]int, ret *[][]string, str []string, end string) {
+	find := false
 	index := len(queue)
-	for i := 0; i < index; i++ {
-		head := queue[i]
+	for k := 0; k < index; k++ {
+		head := queue[k]
+		str = append(str, head)
+		if head == end {
+			find = true
+		}
+		nextQ := make([]string, 0)
+		//获取下一个集合
+		for i := 0; i < len(end) && !find; i++ {
+			var j byte
+			for j = 'a'; j <= 'z'; j++ {
+				tmp := []byte(head)
+				tmp[i] = j
+				str := string(tmp)
+				if wSet[str] == 1 {
+					nextQ = append(nextQ, str)
+					delete(wSet, str)
+				}
+			}
+		}
+		laddersBackTracking(nextQ, wSet, ret, str, end)
 
 	}
 }
