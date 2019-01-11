@@ -1,5 +1,9 @@
 package leedcode
 
+import (
+	"strings"
+)
+
 // 构造数据结构，
 type NumArray struct {
 	sums []int
@@ -223,10 +227,7 @@ func calculateMinimumHP(dungeon [][]int) int {
 }
 
 //139 f(i)标识 前面1到i个字符能否被拆分
-func wordBreak1(s string, wordDict []string) bool {
-	if len(s) < 1 || len(wordDict) < 1 {
-		return false
-	}
+func isBreak(s string, wordDict []string) ([]bool, map[string]bool) {
 	dp := make([]bool, len(s)+1)
 	set := make(map[string]bool, len(wordDict))
 	minLen := len(wordDict[0])
@@ -257,43 +258,34 @@ func wordBreak1(s string, wordDict []string) bool {
 			}
 		}
 	}
-	return dp[len(s)]
+	return dp, set
 }
 
-//140 先算出字符串是否被拆分，再调用dfs
-func wordBreak(s string, wordDict []string) []string {
-	if len(s) < 1 {
+//140 先算出字符串是否被拆分，再调用dfs，搅和在一起写，内存使用上升，逻辑不清晰
+func WordBreak(s string, wordDict []string) []string {
+	if len(s) < 1 || len(wordDict) < 1 {
 		return []string{}
 	}
-	sdp := make([][]string, len(s))
-	for i := 0; i < len(s); i++ {
-		sdp[i] = make([]string, 0)
+	dp, set := isBreak(s, wordDict)
+	if !dp[len(s)] {
+		return []string{}
 	}
-	dp := make([]bool, len(s)+1)
-	set := make(map[string]bool, len(wordDict))
-	for i := 0; i < len(wordDict); i++ {
-		set[wordDict[i]] = true
-	}
-	for i := 0; i < len(s); i++ {
-		for j := 0; j <= i; j++ {
-			left := true
-			sub := s[j : i+1]
-			rig := set[sub]
-			if j != 0 {
-				left = dp[j]
-			}
-			if left && rig {
-				dp[i+1] = true
-				if len(sdp[j]) == 0 {
-					sdp[i] = append(sdp[i], sub)
-					continue
-				}
-				for k := 0; k < len(sdp[j]); k++ {
-					sdp[i] = append(sdp[i], sdp[j][k]+" "+s[j:i+1])
-				}
+	ret := make([]string, 0)
+	wordDFS(s, dp, &ret, 0, set, "")
+	return ret
+}
 
-			}
+func wordDFS(s string, dp []bool, res *[]string, index int, set map[string]bool, str string) {
+	if index >= len(s) {
+		tmp := strings.Trim(str, " ")
+		*res = append(*res, tmp)
+		return
+	}
+	for i := index; i < len(s); i++ {
+		if dp[i+1] && set[s[index:i+1]] {
+			str += " " + s[index:i+1]
+			wordDFS(s, dp, res, i+1, set, str)
+			str = str[0 : len(str)-i-2+index]
 		}
 	}
-	return sdp[len(s)-1]
 }
