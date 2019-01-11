@@ -504,5 +504,3 @@ func (this *LRUCache) Put(key int, value int) {
 	this.link = append(this.link, key)
 	this.hash[key] = value
 }
-
-//166 分数转为小数的计算方法，如果是循环小数，怎么样才算是尽头
