@@ -9,7 +9,7 @@ type NumArray struct {
 	sums []int
 }
 
-func Constructor(nums []int) NumArray {
+/*func Constructor(nums []int) NumArray {
 	arr := new(NumArray)
 	length := len(nums)
 	sums := make([]int, length)
@@ -22,7 +22,7 @@ func Constructor(nums []int) NumArray {
 	}
 	arr.sums = sums
 	return *arr
-}
+}*/
 
 func (this *NumArray) SumRange(i int, j int) int {
 	if i > j {
@@ -288,4 +288,28 @@ func wordDFS(s string, dp []bool, res *[]string, index int, set map[string]bool,
 			str = str[0 : len(str)-i-2+index]
 		}
 	}
+}
+
+//300 f(i)代表i结尾时最长连续最大值，最终的值需要取max{f(i)} O(n^2)
+//还可以使用栈+二分查找，栈维护最长递增序列的个数
+func lengthOfLIS(nums []int) int {
+	ret := 0
+	if len(nums) < 1 {
+		return ret
+	}
+	dp := make([]int, len(nums))
+	dp[0] = 1
+	ret = 1
+	for i := 1; i < len(nums); i++ {
+		dp[i] = 1
+		for j := i - 1; j >= 0; j-- {
+			if nums[i] > nums[j] {
+				dp[i] = max(dp[i], dp[j]+1)
+			}
+		}
+		if dp[i] > ret {
+			ret = dp[i]
+		}
+	}
+	return ret
 }

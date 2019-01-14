@@ -129,7 +129,7 @@ func ladder(beginWord string, endWord string, wordList []string) (int, map[strin
 然后再用深度遍历
 127修改时，各种小问题，不能放入重复的key，获取集合不完整等
 */
-func FindLadders(beginWord string, endWord string, wordList []string) [][]string {
+func findLadders(beginWord string, endWord string, wordList []string) [][]string {
 	ret := make([][]string, 0)
 	count, hash := ladder(beginWord, endWord, wordList)
 	if count == 0 {

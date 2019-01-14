@@ -1,6 +1,8 @@
 package leedcode
 
-import "sort"
+import (
+	"sort"
+)
 
 //68
 //首先确认字符串的行数，然后确认字符串的位置,梳理好逻辑直接做
@@ -176,4 +178,79 @@ func isScramble(s1 string, s2 string) bool {
 		}
 	}
 	return false
+}
+
+//208 trie 前缀树，海量字符串查找使用到的数据结构
+//不考虑空格ab c
+type Trie struct {
+	root *TrieNode
+}
+
+type TrieNode struct {
+	val   byte
+	isKey bool
+	next  map[byte]*TrieNode
+}
+
+/** Initialize your data structure here. */
+func Constructor() Trie {
+	trie := new(Trie)
+	root := new(TrieNode)
+	trie.root = root
+	return *trie
+}
+
+/** Inserts a word into the trie. */
+func (this *Trie) Insert(word string) {
+	if len(word) < 1 {
+		return
+	}
+	root := this.root
+	for i := 0; i < len(word); i++ {
+		if root.next[word[i]] == nil {
+			tmp := new(TrieNode)
+			tmp.val = word[i]
+			if root.next == nil {
+				root.next = make(map[byte]*TrieNode)
+			}
+			root.next[word[i]] = tmp
+		}
+		root = root.next[word[i]]
+		if i == len(word)-1 {
+			root.isKey = true
+		}
+	}
+}
+
+/** Returns if the word is in the trie. */
+func (this *Trie) Search(word string) bool {
+	if len(word) < 1 {
+		return false
+	}
+	root := this.root
+	for i := 0; i < len(word); i++ {
+		if root.next[word[i]] == nil {
+			return false
+		}
+		root = root.next[word[i]]
+		if i == len(word)-1 && root.isKey == false {
+			return false
+		}
+	}
+	return true
+}
+
+/** Returns if there is any word in the trie that starts with the given prefix. */
+func (this *Trie) StartsWith(prefix string) bool {
+	if len(prefix) < 1 {
+		return false
+	}
+	root := this.root
+	for i := 0; i < len(prefix); i++ {
+		if root.next[prefix[i]] == nil {
+			return false
+		}
+		root = root.next[prefix[i]]
+	}
+	return true
 }
