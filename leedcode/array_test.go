@@ -72,3 +72,7 @@ func TestMaximalRectangle(t *testing.T) {
 	fmt.Println(p)
 	fmt.Println(maximalRectangle(p))
 }
+
+func TestGetHint(t *testing.T) {
+	fmt.Println(getHint("1123", "0111"))
+}

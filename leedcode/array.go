@@ -2,6 +2,7 @@ package leedcode
 
 import (
 	"fmt"
+	"strconv"
 )
 
 // make 和 []int的不同
@@ -503,4 +504,31 @@ func (this *LRUCache) Put(key int, value int) {
 	}
 	this.link = append(this.link, key)
 	this.hash[key] = value
+}
+
+//299 hash的简单使用 把条件放在for循环；就直接退出l
+func getHint(secret string, guess string) string {
+	ret := ""
+	countA := 0
+	countB := 0
+	if len(secret) != len(guess) || len(secret) == 0 {
+		return ret
+	}
+	hash := make(map[byte]int)
+	for i := 0; i < len(secret); i++ {
+		if secret[i] == guess[i] {
+			countA++
+			continue
+		}
+		hash[secret[i]]++
+	}
+	for i := 0; i < len(guess); i++ {
+		if hash[guess[i]] > 0 && secret[i] != guess[i] {
+			countB++
+			hash[guess[i]]--
+		}
+	}
+	ret += strconv.Itoa(countA) + "A"
+	ret += strconv.Itoa(countB) + "B"
+	return ret
 }
