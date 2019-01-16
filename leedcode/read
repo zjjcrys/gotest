@@ -7,6 +7,7 @@ go test -v ./gosdk/user/userinfo_test.go -test.run TestGetUserInfoByUid 只测�
 
 go gdb调试
 go build -gcflags "-N -l"
+go build -gcflags '-N -l' -o test-unoptimized test.go 去优化编译
 
 //动态数组的删除
 CombinationSum3 tmp = tmp[:len(tmp)-1] 重新赋值
@@ -68,3 +69,6 @@ select distinct l1.Num as ConsecutiveNums  from Logs l1 left join Logs l2 on l1.
 
 184 最大的前三个 count<3
 max(Salary)
+
+//堆的使用 堆比较d[i] 从0开始d[2*i+1] d[2*i+2]
+如果是从1开始 d[2*i] d[2*i+1]

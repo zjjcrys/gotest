@@ -19,3 +19,8 @@ func TestIsScramble(t *testing.T) {
 	s2 := "bbbbabccccbbbabcba"
 	fmt.Println(isScramble(s1, s2))
 }
+func TestWordPattern(t *testing.T) {
+	s1 := "aaaa"
+	s2 := "dog cat cat dog"
+	fmt.Println(wordPattern(s1, s2))
+}

@@ -2,6 +2,7 @@ package leedcode
 
 import (
 	"sort"
+	"strings"
 )
 
 //68
@@ -193,12 +194,12 @@ type TrieNode struct {
 }
 
 /** Initialize your data structure here. */
-func Constructor() Trie {
+/*func Constructor() Trie {
 	trie := new(Trie)
 	root := new(TrieNode)
 	trie.root = root
 	return *trie
-}
+}*/
 
 /** Inserts a word into the trie. */
 func (this *Trie) Insert(word string) {
@@ -253,4 +254,27 @@ func (this *Trie) StartsWith(prefix string) bool {
 		root = root.next[prefix[i]]
 	}
 	return true
+}
+
+//290 确实是hash使用，单词和位置对应就行，两
+func wordPattern(pattern string, str string) bool {
+	arr := strings.Split(str, " ")
+	if len(pattern) != len(arr) {
+		return false
+	}
+	hashP := make(map[byte]string)
+	hashS := make(map[string]byte)
+	ret := true
+	for i := 0; i < len(pattern); i++ {
+		if hashP[pattern[i]] == "" && hashS[arr[i]] == 0 {
+			hashP[pattern[i]] = arr[i]
+			hashS[arr[i]] = pattern[i]
+			continue
+		}
+		if hashP[pattern[i]] != arr[i] || hashS[arr[i]] != pattern[i] {
+			ret = false
+			break
+		}
+	}
+	return ret
 }
