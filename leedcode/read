@@ -1,4 +1,5 @@
 go 的中文入门文档:https://books.studygolang.com/gobyexample/string-functions/
+go 的开源项目汇总https://juejin.im/entry/5c00e5fce51d4550c76d9097
 
 go test 调试方法
 go test ./gosdk/user/userinfo_test.go 只输出测试结果

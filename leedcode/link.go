@@ -53,3 +53,35 @@ func ReverseKGroup(head *ListNode, k int) *ListNode {
 	}
 	return headNew
 }
+
+//2
+func addTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
+	tmp := new(ListNode)
+	head := tmp
+	carry := 0
+	for l1 != nil || l2 != nil {
+		if l1 != nil && l2 != nil {
+			tmp.Val = (l1.Val + l2.Val + carry) % 10
+			carry = (l1.Val + l2.Val + carry) / 10
+			l1 = l1.Next
+			l2 = l2.Next
+		} else if l1 != nil {
+			tmp.Val = (l1.Val + carry) % 10
+			carry = (l1.Val + carry) / 10
+			l1 = l1.Next
+		} else {
+			tmp.Val = (l2.Val + carry) % 10
+			carry = (l2.Val + carry) / 10
+			l2 = l2.Next
+		}
+		if l1 != nil || l2 != nil {
+			tmp.Next = new(ListNode)
+			tmp = tmp.Next
+		}
+	}
+	if carry > 0 {
+		tmp.Next = new(ListNode)
+		tmp.Next.Val = carry
+	}
+	return head
+}

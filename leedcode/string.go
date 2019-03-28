@@ -278,3 +278,73 @@ func wordPattern(pattern string, str string) bool {
 	}
 	return ret
 }
+
+//3 滑动窗口，可以进一步优化，hash存储的是映射而不是当做set使用，
+//代码写的比我简练
+func lengthOfLongestSubstring(s string) int {
+	maxLen := 0 //记录最长子串的长度
+	hash := make(map[uint8]int)
+	left := 0
+	right := 0
+	for right = 0; right < len(s); {
+		if hash[s[right]] != 1 {
+			hash[s[right]] = 1
+			right++
+			continue
+		}
+
+		if right-left > maxLen {
+			maxLen = right - left
+		}
+		for s[left] != s[right] {
+			hash[s[left]] = 0
+			left++
+		}
+		left++
+		right++
+	}
+	if right-left > maxLen {
+		maxLen = right - left
+	}
+	return maxLen
+}
+
+//8 string转化为数字 考虑多种情况，考虑下边界，0
+func myAtoi(str string) int {
+	ret := 0
+	flag := true  //代表整数
+	sign := false //符号出现了几次
+	for i := 0; i < len(str); i++ {
+		if str[i] >= '0' && str[i] <= '9' {
+			sign = true
+			ret = ret*10 + (int(str[i])) - 48
+			if flag && ret > 2147483647 {
+				ret = 2147483647
+			} else if !flag && ret > 2147483648 {
+				ret = 2147483648
+			}
+			continue
+		}
+		if sign {
+			break
+		}
+		if str[i] == '-' && sign == false {
+			flag = false
+			sign = true
+			continue
+		}
+		if str[i] == '+' && sign == false {
+			sign = true
+			continue
+		}
+		if str[i] == ' ' {
+			continue
+		}
+		break
+
+	}
+	if flag == false {
+		ret = 0 - ret
+	}
+	return ret
+}

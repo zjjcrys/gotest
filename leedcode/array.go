@@ -532,3 +532,15 @@ func getHint(secret string, guess string) string {
 	ret += strconv.Itoa(countB) + "B"
 	return ret
 }
+
+//topic 1
+func twoSum(nums []int, target int) []int {
+	for i := 0; i < len(nums); i++ {
+		for j := i + 1; j < len(nums); j++ {
+			if nums[i]+nums[j] == target {
+				return []int{nums[i], nums[j]}
+			}
+		}
+	}
+	return []int{}
+}

@@ -313,3 +313,27 @@ func lengthOfLIS(nums []int) int {
 	}
 	return ret
 }
+
+//5 最长回文子串,动态规划
+func longestPalindrome(s string) string {
+	if len(s) < 1 {
+		return ""
+	}
+	dp := make([][]int, len(s))
+	left := 0
+	right := 0 //记录结果的左右范围
+	for j := 0; j < len(s); j++ {
+		dp[j] = make([]int, len(s))
+		for i := 0; i < j; i++ {
+			if s[i] == s[j] && (j == i+1 || dp[i+1][j-1] == 1) {
+				dp[i][j] = 1
+			}
+			if dp[i][j] == 1 && right-left+1 < j-i+1 {
+				right = j
+				left = i
+			}
+		}
+		dp[j][j] = 1
+	}
+	return s[left : right+1]
+}

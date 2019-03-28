@@ -66,3 +66,41 @@ func landDFS(board *[][]byte, row int, col int) {
 		landDFS(board, row, col+1)
 	}
 }
+
+//207 检查图的闭环
+//使用邻接表的方式存储，bfs的方式查找
+type graph struct {
+	degree int   //入度
+	nodes  []int //
+}
+
+func canFinish(numCourses int, prerequisites [][]int) bool {
+	return true
+}
+
+//264 丑数2，小值推出大值，
+func nthUglyNumber(n int) int {
+	if n < 1 {
+		return 0
+	}
+	ret := make([]int, n+1)
+	ret[1] = 1
+	m2 := 1 //*2的第几个丑数
+	m3 := 1 //*3的第几个丑数
+	m5 := 1 //*5的第几个丑数
+
+	for i := 2; i <= n; i++ {
+		ret[i] = min(min(ret[m2]*2, ret[m3]*3), ret[m5]*5)
+
+		if ret[i] == ret[m2]*2 {
+			m2++
+		}
+		if ret[i] == ret[m3]*3 {
+			m3++
+		}
+		if ret[i] == ret[m5]*5 {
+			m5++
+		}
+	}
+	return ret[n]
+}
