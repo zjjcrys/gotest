@@ -2,6 +2,8 @@ package leedcode
 
 import (
 	"fmt"
+	"math"
+	"sort"
 	"strconv"
 )
 
@@ -543,4 +545,109 @@ func twoSum(nums []int, target int) []int {
 		}
 	}
 	return []int{}
+}
+
+//15 三数求和 利用双指针，固定其中一个数
+func threeSum(nums []int) [][]int {
+	res := make([][]int, 0)
+	if len(nums) < 3 {
+		return res
+	}
+	sort.Ints(nums)
+	for i := 0; i < len(nums)-2; i++ {
+		fix := nums[i]
+		if fix > 0 { //删选第一个条件
+			break
+		}
+		if i > 0 && nums[i] == nums[i-1] { //排除重复数
+			continue
+		}
+		left := i + 1
+		rig := len(nums) - 1
+		for left < rig { //只能小于，因为是三个不同的数
+			if nums[left]+nums[rig] == -fix {
+				tmp := []int{fix, nums[left], nums[rig]}
+				res = append(res, tmp)                         //tmp重新生成一块新区域，避免被修改
+				for left < rig && nums[left] == nums[left+1] { //再做一遍重复过滤
+					left++
+				}
+				for left < rig && nums[rig] == nums[rig-1] {
+					rig--
+				}
+				left++ //移动指针
+				rig--
+			} else if nums[left]+nums[rig] > -fix {
+				rig--
+			} else {
+				left++
+			}
+		}
+
+	}
+	return res
+}
+
+//topic 26 双指针删除重复项
+func removeDuplicates(nums []int) int {
+	if len(nums) < 2 {
+		return len(nums)
+	}
+	left := 0
+	rig := 1
+
+	for rig < len(nums) {
+		if nums[left] == nums[rig] {
+			rig++
+		} else {
+			nums = append(nums[:left+1], nums[rig:]...)
+			left++
+			rig = left
+		}
+	}
+	nums = append(nums[:left+1])
+	return len(nums)
+}
+
+//topic 88 双指针 注意两个是不是都跑完了
+func merge(nums1 []int, m int, nums2 []int, n int) {
+	index := m + n - 1
+	i := m - 1
+	j := n - 1
+	for i >= 0 && j >= 0 {
+		if nums1[i] < nums2[j] {
+			nums1[index] = nums2[j]
+			j--
+		} else {
+			nums1[index] = nums1[i]
+			i--
+		}
+		index--
+	}
+	for j >= 0 {
+		nums1[index] = nums2[j]
+		j--
+		index--
+	}
+}
+
+//topic 16 找三个离target最近的三个数，双指针
+func threeSumClosest(nums []int, target int) int {
+	sort.Ints(nums)
+	res := nums[0] + nums[1] + nums[2]
+	for point := 0; point < len(nums)-2; point++ {
+		left := point + 1
+		rig := len(nums) - 1
+		for left < rig {
+			sum := nums[point] + nums[left] + nums[rig]
+			if math.Abs(float64(sum-target)) < math.Abs(float64(res-target)) {
+				res = sum
+			}
+			if sum < target {
+				left++
+			} else {
+				rig--
+			}
+		}
+	}
+	return res
 }

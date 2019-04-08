@@ -341,10 +341,49 @@ func myAtoi(str string) int {
 			continue
 		}
 		break
-
 	}
 	if flag == false {
 		ret = 0 - ret
 	}
 	return ret
+}
+
+//12 整数转罗马把所有的情况都列出来 源码也是这个思路
+func intToRoman(num int) string {
+	kilo := []string{"", "M", "MM", "MMM"}
+	hund := []string{"", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM"}
+	ten := []string{"", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC"}
+	unit := []string{"", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"}
+	return kilo[num/1000] + hund[(num%1000)/100] + ten[(num%100)/10] + unit[(num%10)]
+}
+
+//14 遍历
+func longestCommonPrefix(strs []string) string {
+	ret := make([]byte, 0)
+	if len(strs) < 1 {
+		return string(ret)
+	}
+	if len(strs) == 1 {
+		return strs[0]
+	}
+	for index := 0; index < len(strs[0]); index++ {
+		char := strs[0][index]
+		flag := true
+		for i := 1; i < len(strs); i++ {
+			if index >= len(strs[i]) {
+				flag = false
+				break
+			}
+			if char != strs[i][index] {
+				flag = false
+				break
+			}
+		}
+		if flag {
+			ret = append(ret, char)
+		} else {
+			break
+		}
+	}
+	return string(ret)
 }
