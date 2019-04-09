@@ -651,3 +651,44 @@ func threeSumClosest(nums []int, target int) int {
 	}
 	return res
 }
+
+//qid 18 在三层的基础上在套一层,特殊case[0,0,0,0]，三个数的时候和0比较，这个题是和target比较
+func fourSum(nums []int, target int) [][]int {
+	res := make([][]int, 0)
+	if len(nums) < 4 {
+		return res
+	}
+	sort.Ints(nums)
+	for i := 0; i < len(nums)-3; i++ {
+		for j := i + 1; j < len(nums)-2; j++ {
+			if i > 0 && nums[i] == nums[i-1] { //排除重复数
+				continue
+			}
+			if j > i+1 && nums[j] == nums[j-1] { //排除重复数,应该>i+1
+				continue
+			}
+			fix := nums[i] + nums[j]
+			left := j + 1
+			rig := len(nums) - 1
+			for left < rig { //只能小于，因为是三个不同的数
+				if nums[left]+nums[rig]+fix == target {
+					tmp := []int{nums[i], nums[j], nums[left], nums[rig]}
+					res = append(res, tmp)                         //tmp重新生成一块新区域，避免被修改
+					for left < rig && nums[left] == nums[left+1] { //再做一遍重复过滤
+						left++
+					}
+					for left < rig && nums[rig] == nums[rig-1] {
+						rig--
+					}
+					left++ //移动指针
+					rig--
+				} else if nums[left]+nums[rig]+fix > target {
+					rig--
+				} else {
+					left++
+				}
+			}
+		}
+	}
+	return res
+}
