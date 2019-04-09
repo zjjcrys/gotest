@@ -348,3 +348,45 @@ func myAtoi(str string) int {
 	}
 	return ret
 }
+
+//stack
+func isValid(s string) bool {
+	str := make([]byte, 0)
+	flag := true
+	for i := 0; i < len(s); i++ {
+		if s[i] == '(' || s[i] == '[' || s[i] == '{' {
+			str = append(str, s[i])
+		} else if s[i] == ')' {
+			if len(str) < 1 {
+				return false
+			} else if str[len(str)-1] != '(' {
+				flag = false
+				break
+			} else {
+				str = str[0 : len(str)-1]
+			}
+		} else if s[i] == ']' {
+			if len(str) < 1 {
+				return false
+			} else if len(str) > 0 && str[len(str)-1] != '[' {
+				flag = false
+				break
+			} else {
+				str = str[0 : len(str)-1]
+			}
+		} else if s[i] == '}' {
+			if len(str) < 1 {
+				return false
+			} else if len(str) > 0 && str[len(str)-1] != '{' {
+				flag = false
+				break
+			} else {
+				str = str[0 : len(str)-1]
+			}
+		}
+	}
+	if len(str) > 0 {
+		flag = false
+	}
+	return flag
+}

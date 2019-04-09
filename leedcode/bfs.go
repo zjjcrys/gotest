@@ -153,3 +153,28 @@ func ladderDFS(res *[][]string, hash map[string][]string, index string, str []st
 		ladderDFS(res, hash, hash[index][i], str, count, end)
 	}
 }
+
+//topic 17 回溯算法
+func letterCombinations(digits string) []string {
+	letter := map[byte]string{'2': "abc", '3': "def", '4': "ghi", '5': "jkl", '6': "mno", '7': "pqrs", '8': "tuv", '9': "wxyz"}
+	res := make([]string, 0)
+	if len(digits) == 0 {
+		return res
+	}
+	enum(&res, letter, []byte{}, digits, 0)
+	return res
+}
+
+func enum(res *[]string, let map[byte]string, index []byte, digits string, pos int) {
+	if len(index) == len(digits) {
+		tmp := make([]byte, len(index))
+		copy(tmp, index)
+		*res = append(*res, string(tmp))
+		return
+	}
+	for i := 0; i < len(let[digits[pos]]); i++ {
+		index = append(index, let[digits[pos]][i])
+		enum(res, let, index, digits, pos+1)
+		index = append(index[:len(index)-1])
+	}
+}

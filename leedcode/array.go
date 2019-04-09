@@ -544,3 +544,62 @@ func twoSum(nums []int, target int) []int {
 	}
 	return []int{}
 }
+
+//topic 10 内存怎么优化，双指针，指针迁移的时机根据题目实际来说
+func maxArea(height []int) int {
+	ret := 0
+	if len(height) < 2 {
+		return ret
+	}
+	left := 0
+	rig := len(height) - 1
+
+	for left < rig {
+		tmp := min(height[left], height[rig]) * (rig - left)
+		if ret < tmp {
+			ret = tmp
+		}
+		if left <= rig {
+			left++
+		} else {
+			rig--
+		}
+	}
+	return ret
+}
+
+//qid 罗马数字转换
+func romanToInt(s string) int {
+	mapTable := map[byte]int{'I': 1, 'V': 5, 'X': 10, 'L': 50, 'C': 100, 'D': 500, 'M': 1000}
+	special := map[string]int{"IV": 4, "IX": 9, "XL": 40, "XC": 90, "CD": 400, "CM": 900}
+	ret := 0
+	for i := 0; i < len(s); i++ {
+		if i+1 < len(s) && special[s[i:i+2]] > 0 {
+			ret += special[s[i:i+2]]
+			i++
+		} else {
+			ret += mapTable[s[i]]
+		}
+
+	}
+	return ret
+}
+
+//topic 19 双指针 特殊case n=节点个数逻辑,n是有效的，否则逻辑需要变化
+func removeNthFromEnd(head *ListNode, n int) *ListNode {
+	left := head
+	rig := head
+	for i := 1; i <= n; i++ {
+		if rig.Next != nil {
+			rig = rig.Next
+		} else {
+			return left.Next
+		}
+	}
+	for rig.Next != nil {
+		left = left.Next
+		rig = rig.Next
+	}
+	left.Next = left.Next.Next
+	return head
+}
