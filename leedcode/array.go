@@ -751,3 +751,135 @@ func fourSum(nums []int, target int) [][]int {
 	}
 	return res
 }
+
+//pid 27 双指针
+func removeElement(nums []int, val int) int {
+	left := 0
+	rig := 0
+	length := len(nums)
+	if length < 1 {
+		return left
+	}
+
+	for left < length && rig < length {
+		if nums[rig] != val {
+			nums[left] = nums[rig]
+			left++
+			rig++
+		} else {
+			rig++
+		}
+	}
+	return left
+}
+
+//pid 28 特殊情况下应该返回0，注意越界问题
+//kmp 原理没用上
+func strStr(haystack string, needle string) int {
+	if len(needle) < 1 {
+		return 0
+	}
+
+	for left := 0; left < len(haystack); left++ {
+		if haystack[left] == needle[0] {
+			if left+len(needle) > len(haystack) {
+				break
+			}
+			if needle == haystack[left:left+len(needle)] {
+				return left
+			}
+		}
+	}
+	return -1
+}
+
+//pid 29 二分查找 特殊case,0 越界问题
+func divide(dividend int, divisor int) int {
+	if dividend == -2147483648 && divisor == -1 {
+		return 2147483647
+	}
+
+	flag := true //符号位，默认
+	if (dividend > 0 && divisor < 0) || (dividend < 0 && divisor > 0) {
+		flag = false
+	}
+	//排除符号干扰
+	dividend = abs(dividend)
+	divisor = abs(divisor)
+	res := dividend - divisor
+	if res < 0 {
+		return 0
+	}
+	index := divisor
+	count := 1
+	consult := 1
+	for res >= divisor {
+		if res > index+index {
+			index += index
+			count += count
+		} else if index > divisor {
+			for res < index {
+				index = index >> 1
+				count = count >> 1
+			}
+
+		}
+		consult += count
+		res -= index
+		//fmt.Println(consult, res, index)
+	}
+	if !flag {
+		return -consult
+	}
+	return consult
+
+}
+func abs(num int) int {
+	if num >= 0 {
+		return num
+	} else {
+		return -num
+	}
+}
+
+//先找到目标值，再从两边扩展 pid 34
+func searchRange(nums []int, target int) []int {
+	if len(nums)<1 {
+		return []int{-1,-1}
+	}
+
+	if target<nums[0]||target>nums[len(nums)-1] {
+		return []int{-1,-1}
+	}
+	leftRes:=-1
+	rigRes:=-1
+	leftIndex:=0
+	rigIndex:=len(nums)-1
+	find:=-1
+	for leftIndex<=rigIndex {
+		mid:=(leftIndex+rigIndex)/2
+		if target==nums[mid] {
+			find=mid
+			break
+		}else if target<nums[mid] {
+			rigIndex=mid-1
+		} else {
+			leftIndex=mid+1
+		}
+	}
+	if find==-1 {
+		return []int{leftRes,rigRes}
+	}
+	for i:=find;i>=0;i-- {
+		if nums[i]==target {
+			leftRes=i
+		}
+	}
+	for i:=find;i<len(nums);i++ {
+		if nums[i]==target{
+			rigRes=i
+		}
+	}
+	return []int{leftRes,rigRes}
+}
+//pid 
