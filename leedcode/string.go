@@ -2,6 +2,7 @@ package leedcode
 
 import (
 	"sort"
+	"strconv"
 	"strings"
 )
 
@@ -428,4 +429,52 @@ func longestCommonPrefix(strs []string) string {
 		}
 	}
 	return string(ret)
+}
+//pid 38 每一个数是根据前一个数的读出来的
+func countAndSay(n int) string {
+	res:="1"
+	if n==1 {
+		return res
+	}
+	for i:=2;i<=n;i++ {
+		tmp:=""
+		count:=1
+		for j:=1;j< len(res);j++ {
+			if res[j]==res[j-1] {
+				count++
+			} else {
+				tmp=tmp+strconv.Itoa(count)+string(res[j-1])
+				count=1
+			}
+		}
+		tmp=tmp+strconv.Itoa(count)+string(res[len(res)-1])
+		res=tmp
+	}
+	return res
+}
+//pid 58 先trim
+func lengthOfLastWord(s string) int {
+	if len(s) <1 {
+		return 0
+	}
+	empty:=-1
+	for i:=len(s)-1;i>=0;i-- {
+		if s[i]!=' ' {
+			empty=i
+			break
+		}
+	}
+	s=s[:empty+1]
+	length:=len(s)
+	empty=-1
+	for i:=len(s)-1;i>=0;i-- {
+		if s[i]==' ' {
+			empty=i
+			break
+		}
+	}
+	if length-1-empty<0 {
+		return 0
+	}
+	return length-1-empty
 }

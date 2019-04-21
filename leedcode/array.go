@@ -882,4 +882,7 @@ func searchRange(nums []int, target int) []int {
 	}
 	return []int{leftRes,rigRes}
 }
-//pid 
+//pid 34 另一种解法 两次二分查找，第一次右边界
+/*func searchRange2(nums []int, target int) []int {
+	if
+}*/

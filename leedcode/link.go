@@ -108,3 +108,26 @@ func swapPairs(head *ListNode) *ListNode {
 	}
 	return dummy.Next
 }
+//pid 61 链表
+func rotateRight(head *ListNode, k int) *ListNode {
+	tail:=head
+	if tail==nil {
+		return tail
+	}
+	length:=1
+	for tail.Next!=nil {
+		length++
+		tail=tail.Next
+	}
+	posIndex:=length-length%2
+	count:=1
+	before:=head
+	for count<posIndex {
+		before=before.Next
+		count++
+	}
+	res:=before.Next
+	before.Next=nil
+	tail.Next = head
+	return res
+}
