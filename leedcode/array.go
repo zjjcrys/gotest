@@ -882,7 +882,21 @@ func searchRange(nums []int, target int) []int {
 	}
 	return []int{leftRes,rigRes}
 }
-//pid 34 另一种解法 两次二分查找，第一次右边界
-/*func searchRange2(nums []int, target int) []int {
-	if
-}*/
+//pid 41 使用了sort，复杂度是nlog(n)
+//pid 41 1放到nums[0] 2 nums[1] nums[i]==nums[nums[i]-1] 这种思想比较常见
+func firstMissingPositive(nums []int) int {
+	res:=1
+	sort.Ints(nums)
+	for i:=0;i<len(nums); i++{
+		if nums[i]<=0 {
+			continue
+		}
+		if res<nums[i] {
+			break
+		}
+		if nums[i]==res {
+			res++
+		}
+	}
+	return res
+}
