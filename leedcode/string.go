@@ -2,6 +2,7 @@ package leedcode
 
 import (
 	"sort"
+	"strconv"
 	"strings"
 )
 
@@ -348,6 +349,48 @@ func myAtoi(str string) int {
 	return ret
 }
 
+//stack
+func isValid(s string) bool {
+	str := make([]byte, 0)
+	flag := true
+	for i := 0; i < len(s); i++ {
+		if s[i] == '(' || s[i] == '[' || s[i] == '{' {
+			str = append(str, s[i])
+		} else if s[i] == ')' {
+			if len(str) < 1 {
+				return false
+			} else if str[len(str)-1] != '(' {
+				flag = false
+				break
+			} else {
+				str = str[0 : len(str)-1]
+			}
+		} else if s[i] == ']' {
+			if len(str) < 1 {
+				return false
+			} else if len(str) > 0 && str[len(str)-1] != '[' {
+				flag = false
+				break
+			} else {
+				str = str[0 : len(str)-1]
+			}
+		} else if s[i] == '}' {
+			if len(str) < 1 {
+				return false
+			} else if len(str) > 0 && str[len(str)-1] != '{' {
+				flag = false
+				break
+			} else {
+				str = str[0 : len(str)-1]
+			}
+		}
+	}
+	if len(str) > 0 {
+		flag = false
+	}
+	return flag
+}
+
 //12 整数转罗马把所有的情况都列出来 源码也是这个思路
 func intToRoman(num int) string {
 	kilo := []string{"", "M", "MM", "MMM"}
@@ -386,4 +429,52 @@ func longestCommonPrefix(strs []string) string {
 		}
 	}
 	return string(ret)
+}
+//pid 38 每一个数是根据前一个数的读出来的
+func countAndSay(n int) string {
+	res:="1"
+	if n==1 {
+		return res
+	}
+	for i:=2;i<=n;i++ {
+		tmp:=""
+		count:=1
+		for j:=1;j< len(res);j++ {
+			if res[j]==res[j-1] {
+				count++
+			} else {
+				tmp=tmp+strconv.Itoa(count)+string(res[j-1])
+				count=1
+			}
+		}
+		tmp=tmp+strconv.Itoa(count)+string(res[len(res)-1])
+		res=tmp
+	}
+	return res
+}
+//pid 58 先trim
+func lengthOfLastWord(s string) int {
+	if len(s) <1 {
+		return 0
+	}
+	empty:=-1
+	for i:=len(s)-1;i>=0;i-- {
+		if s[i]!=' ' {
+			empty=i
+			break
+		}
+	}
+	s=s[:empty+1]
+	length:=len(s)
+	empty=-1
+	for i:=len(s)-1;i>=0;i-- {
+		if s[i]==' ' {
+			empty=i
+			break
+		}
+	}
+	if length-1-empty<0 {
+		return 0
+	}
+	return length-1-empty
 }

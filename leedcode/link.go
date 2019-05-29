@@ -85,3 +85,49 @@ func addTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
 	}
 	return head
 }
+//pid 24链表 边界条件
+func swapPairs(head *ListNode) *ListNode {
+	if head==nil {
+		return head
+	}
+	dummy := new(ListNode)
+	dummy.Next = head
+	first := dummy
+	x := first.Next
+	y := x.Next
+	for first != nil && x != nil && y != nil {
+		first.Next = y
+		x.Next = y.Next
+		y.Next = x
+		first = x
+		if first.Next==nil {
+			break
+		}
+		x = first.Next
+		y = x.Next
+	}
+	return dummy.Next
+}
+//pid 61 链表
+func rotateRight(head *ListNode, k int) *ListNode {
+	tail:=head
+	if tail==nil {
+		return tail
+	}
+	length:=1
+	for tail.Next!=nil {
+		length++
+		tail=tail.Next
+	}
+	posIndex:=length-length%2
+	count:=1
+	before:=head
+	for count<posIndex {
+		before=before.Next
+		count++
+	}
+	res:=before.Next
+	before.Next=nil
+	tail.Next = head
+	return res
+}
