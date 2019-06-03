@@ -900,3 +900,227 @@ func firstMissingPositive(nums []int) int {
 	}
 	return res
 }
+//pid 81搜索旋转数组
+func search(nums []int, target int) bool {
+	if len(nums)<1 {
+		return false
+	}
+	left:=0
+	rig:=len(nums)-1
+	for left<=rig {
+		mid:=(left+rig)/2
+		if nums[mid]==target {
+			return true
+		}
+		if nums[left]<=nums[mid] { //
+			if target<nums[mid] && target>=nums[left]{
+				rig=mid-1
+			} else {
+				left=mid+1
+			}
+		} else {
+			if target>nums[mid] && target<=nums[rig]{
+				left=mid+1
+			}else {
+				rig=mid-1
+			}
+		}
+	}
+	return false
+}
+//pid 80
+func removeDuplicates2(nums []int) int {
+	if len(nums)<3 {
+		return len(nums)
+	}
+	new:=1
+	for old:=2;old<len(nums);old++ {
+		if nums[old]==nums[new] && nums[old]==nums[new-1] {
+			continue
+		}
+		nums[new+1]=nums[old]
+		new++
+	}
+	return new+1
+}
+//pid 54 螺旋矩阵
+func spiralOrder(matrix [][]int) []int {
+	if len(matrix)<1 {
+		return []int{}
+	}
+	m:=len(matrix)
+	n:=len(matrix[0])
+	ret:=make([]int,m*n)
+	circle:=(min(m,n)+1)/2
+	index:=0
+	for i:=0;i<circle;i++ {
+		for j:=i;j<n-i;j++ {
+			ret[index]=matrix[i][j]
+			index++
+		}
+		for j:=i+1;j<m-i&&index<m*n;j++ {
+			ret[index]=matrix[j][n-i-1]
+			index++
+		}
+		for j:=n-i-2;j>=i&&index<m*n;j-- {
+			ret[index]=matrix[m-i-1][j]
+			index++
+		}
+		for j:=m-i-2;j>i&&index<m*n;j-- {
+			ret[index]=matrix[j][i]
+			index++
+		}
+	}
+	return ret
+}
+
+func myPow(x float64, n int) float64 {
+	var res float64
+	res=1
+	for i:=n;i!=0;i/=2 {
+		if i%2!=0 {
+			res=res*x
+		}
+		x=x*x
+	}
+	if n>0 {
+		return res
+	} else {
+		return 1/res
+	}
+}
+
+func spiralOrder(matrix [][]int) []int {
+	if len(matrix)<1 {
+		return []int{}
+	}
+	m:=len(matrix)
+	n:=len(matrix[0])
+	ret:=make([]int,m*n)
+	circle:=(n+1)/2
+	index:=0
+	for i:=0;i<circle;i++ {
+		for j:=i;j<n-i;j++ {
+			ret[index]=matrix[i][j]
+			index++
+		}
+		for j:=i+1;j<m-i&&index<m*n;j++ {
+			ret[index]=matrix[j][n-i-1]
+			index++
+		}
+		for j:=n-i-2;j>=i&&index<m*n;j-- {
+			ret[index]=matrix[m-i-1][j]
+			index++
+		}
+		for j:=m-i-2;j>i&&index<m*n;j-- {
+			ret[index]=matrix[j][i]
+			index++
+		}
+	}
+	return ret
+}
+func generateMatrix(n int) [][]int {
+	if n<1 {
+		return [][]int{}
+	}
+	matrix:=make([][]int,n)
+	for i:=0;i<n;i++ {
+		matrix[i]=make([]int,n)
+	}
+	circle:=(n+1)/2
+	index:=1
+	for i:=0;i<circle;i++ {
+		for j:=i;j<n-i;j++ {
+			matrix[i][j]=index
+			index++
+		}
+		for j:=i+1;j<n-i;j++ {
+			matrix[j][n-i-1]=index
+			index++
+		}
+		for j:=n-i-2;j>=i&&index<=n*n;j-- {
+			matrix[n-i-1][j]=index
+			index++
+		}
+		for j:=n-i-2;j>i&&index<=n*n;j-- {
+			matrix[j][i]=index
+			index++
+		}
+	}
+	return matrix
+}
+//pid 187不能有重复，注意边界 用bit节省空间
+func findRepeatedDnaSequences(s string) []string {
+	if len(s)<11 {
+		return []string{}
+	}
+	hash:=make(map[string]int)
+	ret:=make([]string,0)
+	for i:=10;i<len(s)+1;i++ {
+		if hash[s[i-10:i]]==1 {
+			ret=append(ret,s[i-10:i])
+			hash[s[i-10:i]]++
+		}else {
+			hash[s[i-10:i]]++
+		}
+	}
+	return ret
+}
+
+//445 递归解法
+func addTwoNumbers2(l1 *ListNode, l2 *ListNode) *ListNode {
+	if l1==nil {
+		return l2
+	}
+	if l2==nil {
+		return l1
+	}
+	count1:=length(l1)
+	count2:=length(l2)
+	ret:=new(ListNode)
+	if count1>=count2 {
+		ret.Next=helper(l1,l2,count1-count2)
+	}else {
+		ret.Next=helper(l2,l1,count2-count1)
+	}
+	if ret.Next.Val>9 {
+		ret.Next.Val%=10
+		ret.Val=1
+		return ret
+	}
+	return ret.Next
+}
+
+func length(root *ListNode) int {
+	ret:=0
+	if root==nil {
+		return ret
+	}
+
+	for (root!=nil) {
+		ret++
+		root=root.Next
+	}
+	return ret
+}
+
+func helper(long *ListNode,short *ListNode,diff int) *ListNode{
+	if long==nil {
+		return nil
+	}
+	res:=new(ListNode)
+	var post *ListNode
+	if diff>0 {
+		res.Val=long.Val
+		post=helper(long.Next,short,diff-1)
+	} else {
+		res.Val=long.Val+short.Val
+		post=helper(long.Next,short.Next,diff)
+	}
+	if post!=nil &&post.Val>9{
+		post.Val%=10
+		res.Val++
+	}
+	res.Next=post
+	return res
+}
