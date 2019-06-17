@@ -844,59 +844,106 @@ func abs(num int) int {
 
 //先找到目标值，再从两边扩展 pid 34
 func searchRange(nums []int, target int) []int {
-	if len(nums)<1 {
-		return []int{-1,-1}
+	if len(nums) < 1 {
+		return []int{-1, -1}
 	}
 
-	if target<nums[0]||target>nums[len(nums)-1] {
-		return []int{-1,-1}
+	if target < nums[0] || target > nums[len(nums)-1] {
+		return []int{-1, -1}
 	}
-	leftRes:=-1
-	rigRes:=-1
-	leftIndex:=0
-	rigIndex:=len(nums)-1
-	find:=-1
-	for leftIndex<=rigIndex {
-		mid:=(leftIndex+rigIndex)/2
-		if target==nums[mid] {
-			find=mid
+	leftRes := -1
+	rigRes := -1
+	leftIndex := 0
+	rigIndex := len(nums) - 1
+	find := -1
+	for leftIndex <= rigIndex {
+		mid := (leftIndex + rigIndex) / 2
+		if target == nums[mid] {
+			find = mid
 			break
-		}else if target<nums[mid] {
-			rigIndex=mid-1
+		} else if target < nums[mid] {
+			rigIndex = mid - 1
 		} else {
-			leftIndex=mid+1
+			leftIndex = mid + 1
 		}
 	}
-	if find==-1 {
-		return []int{leftRes,rigRes}
+	if find == -1 {
+		return []int{leftRes, rigRes}
 	}
-	for i:=find;i>=0;i-- {
-		if nums[i]==target {
-			leftRes=i
+	for i := find; i >= 0; i-- {
+		if nums[i] == target {
+			leftRes = i
 		}
 	}
-	for i:=find;i<len(nums);i++ {
-		if nums[i]==target{
-			rigRes=i
+	for i := find; i < len(nums); i++ {
+		if nums[i] == target {
+			rigRes = i
 		}
 	}
-	return []int{leftRes,rigRes}
+	return []int{leftRes, rigRes}
 }
+
 //pid 41 使用了sort，复杂度是nlog(n)
 //pid 41 1放到nums[0] 2 nums[1] nums[i]==nums[nums[i]-1] 这种思想比较常见
 func firstMissingPositive(nums []int) int {
-	res:=1
+	res := 1
 	sort.Ints(nums)
-	for i:=0;i<len(nums); i++{
-		if nums[i]<=0 {
+	for i := 0; i < len(nums); i++ {
+		if nums[i] <= 0 {
 			continue
 		}
-		if res<nums[i] {
+		if res < nums[i] {
 			break
 		}
-		if nums[i]==res {
+		if nums[i] == res {
 			res++
 		}
 	}
 	return res
+}
+
+//pid 4 多悟
+func findMedianSortedArrays(nums1 []int, nums2 []int) float64 {
+	if len(nums1) > len(nums2) {
+		return findMedianSortedArrays(nums2, nums1)
+	}
+	m := len(nums1)
+	n := len(nums2)
+	left := 0
+	rig := m
+	tmp := (m + n + 1) / 2
+	for left <= rig {
+		i := (left + rig) / 2
+		j := tmp - i
+		if i > 0 && j < n && nums1[i-1] > nums2[j] {
+			rig = i - 1
+		} else if j > 0 && i < m && nums1[i] < nums2[j-1] {
+			left = i + 1
+		} else {
+			leftMax := 0
+			if i == 0 {
+				leftMax = nums2[j-1]
+			} else if j == 0 {
+				leftMax = nums1[i-1]
+			} else {
+				leftMax = max(nums1[i-1], nums2[j-1])
+			}
+			if (m+n)%2 == 1 {
+				return float64(leftMax)
+			}
+
+			rigMin := 0
+			if i == m {
+				rigMin = nums2[j]
+			} else if j == n {
+				rigMin = nums1[i]
+			} else {
+				rigMin = min(nums1[i], nums2[j])
+			}
+
+			return (float64(leftMax) + float64(rigMin)) / 2
+		}
+
+	}
+	return 0
 }

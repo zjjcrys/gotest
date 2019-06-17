@@ -123,3 +123,20 @@ func rightSideView(root *TreeNode) []int {
 	}
 	return ret
 }
+
+//98 验证二叉搜索树
+func isValidBST(root *TreeNode) bool {
+	if root == nil {
+		return true
+	}
+	return valid(root.Left, INT_MIN, root.Val) && valid(root.Right, root.Val, INT_MAX)
+}
+func valid(root *TreeNode, min int, max int) bool {
+	if root == nil {
+		return true
+	}
+	if !(root.Val < max && root.Val > min) {
+		return false
+	}
+	return valid(root.Left, min, root.Val) && valid(root.Right, root.Val, max)
+}
