@@ -1,5 +1,7 @@
 package leedcode
 
+import "math"
+
 type TreeNode struct {
 	Val   int
 	Left  *TreeNode
@@ -124,19 +126,209 @@ func rightSideView(root *TreeNode) []int {
 	return ret
 }
 
-//98 验证二叉搜索树
+//pid 98 二叉搜索树 可以用中序遍历或者递归
 func isValidBST(root *TreeNode) bool {
-	if root == nil {
-		return true
-	}
-	return valid(root.Left, INT_MIN, root.Val) && valid(root.Right, root.Val, INT_MAX)
+	return valid(root, INT_MIN, INT_MAX)
 }
 func valid(root *TreeNode, min int, max int) bool {
 	if root == nil {
 		return true
 	}
-	if !(root.Val < max && root.Val > min) {
+	if root.Val <= min || root.Val >= max {
+		return false
+	}
+
+	if root.Right != nil && root.Right.Val <= root.Val {
 		return false
 	}
 	return valid(root.Left, min, root.Val) && valid(root.Right, root.Val, max)
+}
+
+//中序遍历
+func inorderTraversal(root *TreeNode) []int {
+	res := make([]int, 0)
+	inorder(root, &res)
+	return res
+}
+
+func inorder(root *TreeNode, res *[]int) {
+	if root == nil {
+		return
+	}
+	if root.Left != nil {
+		inorder(root.Left, res)
+	}
+	*res = append(*res, root.Val)
+	if root.Right != nil {
+		inorder(root.Right, res)
+	}
+}
+
+//pid 101 对称二叉树
+func isSymmetric(root *TreeNode) bool {
+	if root == nil {
+		return true
+	}
+	return sym(root.Left, root.Right)
+
+}
+func sym(left *TreeNode, rig *TreeNode) bool {
+	if left == nil && rig == nil {
+		return true
+	}
+	if left != nil && rig == nil || left == nil && rig != nil || left.Val != rig.Val {
+		return false
+	}
+	return sym(left.Left, rig.Right) && sym(left.Right, rig.Left)
+}
+
+//pid 104 最大深度
+func maxDepth(root *TreeNode) int {
+	if root == nil {
+		return 0
+	}
+	if root.Left == nil && root.Right == nil {
+		return 1
+	}
+	left := maxDepth(root.Left) + 1
+	rig := maxDepth(root.Right) + 1
+	if left > rig {
+		return left
+	} else {
+		return rig
+	}
+}
+
+//pid 102层次遍历
+func levelOrder(root *TreeNode) [][]int {
+	res := make([][]int, 0)
+	if root == nil {
+		return res
+	}
+	level := make([]*TreeNode, 0)
+	level = append(level, root)
+	levelArr := make([]int, 0)
+
+	length := len(level)
+	index := 0
+	for index < length {
+		tmp := level[0]
+		levelArr = append(levelArr, tmp.Val)
+		index++
+		level = level[1:]
+		if tmp.Left != nil {
+			level = append(level, tmp.Left)
+		}
+		if tmp.Right != nil {
+			level = append(level, tmp.Right)
+		}
+		if index == length {
+			item := make([]int, len(levelArr))
+			copy(item, levelArr)
+			res = append(res, item)
+			levelArr = levelArr[0:0]
+			length = len(level)
+			index = 0
+		}
+	}
+	for i, j := 0, len(res)-1; i < j; i, j = i+1, j-1 {
+		res[i], res[j] = res[j], res[i]
+	}
+	return res
+}
+
+//pid 层次遍历
+func zigzagLevelOrder(root *TreeNode) [][]int {
+	res := make([][]int, 0)
+	if root == nil {
+		return res
+	}
+	level := make([]*TreeNode, 0)
+	level = append(level, root)
+	levelArr := make([]int, 0)
+
+	length := len(level)
+	index := 0
+	for index < length {
+		tmp := level[0]
+		levelArr = append(levelArr, tmp.Val)
+		index++
+		level = level[1:]
+		if tmp.Left != nil {
+			level = append(level, tmp.Left)
+		}
+		if tmp.Right != nil {
+			level = append(level, tmp.Right)
+		}
+		if index == length {
+			item := make([]int, len(levelArr))
+			copy(item, levelArr)
+			if len(res)%2 == 1 {
+				for i, j := 0, len(item)-1; i < j; i, j = i+1, j-1 {
+					item[i], item[j] = item[j], item[i]
+				}
+			}
+			res = append(res, item)
+			levelArr = levelArr[0:0]
+			length = len(level)
+			index = 0
+		}
+	}
+	return res
+}
+
+//pid 82 删除重复元素
+func deleteDuplicates2(head *ListNode) *ListNode {
+	if head == nil || head.Next == nil {
+		return head
+	}
+	tmp := new(ListNode)
+	tmp.Next = head
+	res := tmp
+	fir := head
+	sed := head.Next
+	for sed != nil {
+		if sed.Val != fir.Val {
+			tmp = fir
+			fir = fir.Next
+			sed = sed.Next
+			continue
+		}
+		for sed != nil && sed.Val == fir.Val {
+			sed = sed.Next
+		}
+		tmp.Next = sed
+		fir = tmp.Next
+		if fir != nil {
+			sed = fir.Next
+		}
+	}
+	return res.Next
+}
+
+//pid 判断平衡树
+func isBalanced(root *TreeNode) bool {
+	if checkDepth(root) == -1 {
+		return false
+	}
+	return true
+}
+func checkDepth(root *TreeNode) int {
+	if root == nil {
+		return 0
+	}
+	left := checkDepth(root.Left)
+	if left == -1 {
+		return -1
+	}
+	right := checkDepth(root.Right)
+	if right == -1 {
+		return -1
+	}
+	diff := math.Abs(float64(left - right))
+	if diff > 1 {
+		return -1
+	} else {
+		return 1 + max(left, right)
+	}
 }

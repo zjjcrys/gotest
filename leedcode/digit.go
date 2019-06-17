@@ -305,3 +305,7 @@ func Reverse(x int) int {
 	}
 	return ret
 }
+//pid 96 卡塔兰数
+func numTrees(n int) int {
+
+}

@@ -131,3 +131,23 @@ func rotateRight(head *ListNode, k int) *ListNode {
 	tail.Next = head
 	return res
 }
+//pid 83 删除重复元素
+func deleteDuplicates(head *ListNode) *ListNode {
+	if head==nil || head.Next==nil {
+		return head
+	}
+	fir:=head
+	sed:=head.Next
+	for sed!=nil {
+		if sed.Val==fir.Val {
+			fir.Next = sed.Next
+			sed=fir.Next
+		} else {
+			fir=fir.Next
+			sed=fir.Next
+		}
+
+	}
+	return head
+}
+

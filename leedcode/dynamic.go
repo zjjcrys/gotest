@@ -360,7 +360,7 @@ func maxSubArray(nums []int) int {
 }
 
 //topic 10 动态规划求解正则匹配
-func isMatch2(s string, p string) bool {
+func isMatch3(s string, p string) bool {
 	m := len(s)
 	n := len(p)
 	dp := make([][]bool, m+1)
