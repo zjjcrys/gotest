@@ -309,6 +309,27 @@ func lengthOfLongestSubstring(s string) int {
 	}
 	return maxLen
 }
+//topic 3 优化后
+func lengthOfLongestSubstring2(s string) int {
+	ret:=0
+	left:=0
+	rig:=0
+	hash:=make(map[uint8]int)
+	for rig=0;rig<len(s);rig++ {
+		if _,ok:=hash[s[rig]];ok &&hash[s[rig]]>=left{ //exist
+			if rig-left>ret {
+				ret=rig-left
+			}
+			left=hash[s[rig]]+1
+		}
+		hash[s[rig]]=rig
+	}
+	if rig-left>ret {
+		ret=rig-left
+	}
+
+	return ret
+}
 
 //8 string转化为数字 考虑多种情况，考虑下边界，0
 func myAtoi(str string) int {

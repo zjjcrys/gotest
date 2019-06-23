@@ -178,3 +178,34 @@ func enum(res *[]string, let map[byte]string, index []byte, digits string, pos i
 		index = append(index[:len(index)-1])
 	}
 }
+//pid 22 类似于层次遍历
+func generateParenthesis(n int) []string {
+	ret:=make([]string,0)
+	if n==0 {
+		return ret
+	}
+	ret=append(ret,"()")
+	hash:=make(map[string]int)
+	hash["()"]=1
+	for i:=2;i<=n;i++ {
+		nLen:=len(ret)
+		for nLen>0 {
+			str:=ret[0]
+			for j:=0;j<len(str);j++ {
+				if str[j]=='('{
+					if hash[str[:j+1]+"()"+str[j+1:]]==0 {
+						hash[str[:j+1]+"()"+str[j+1:]]=1
+						ret=append(ret,str[:j+1]+"()"+str[j+1:])
+					}
+				}
+			}
+			ret=ret[1:]
+			if hash["()"+str]==0 {
+				hash["()"+str]=1
+				ret=append(ret,"()"+str)
+			}
+			nLen--
+		}
+	}
+	return ret
+}
