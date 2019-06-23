@@ -844,130 +844,180 @@ func abs(num int) int {
 
 //先找到目标值，再从两边扩展 pid 34
 func searchRange(nums []int, target int) []int {
-	if len(nums)<1 {
-		return []int{-1,-1}
+	if len(nums) < 1 {
+		return []int{-1, -1}
 	}
 
-	if target<nums[0]||target>nums[len(nums)-1] {
-		return []int{-1,-1}
+	if target < nums[0] || target > nums[len(nums)-1] {
+		return []int{-1, -1}
 	}
-	leftRes:=-1
-	rigRes:=-1
-	leftIndex:=0
-	rigIndex:=len(nums)-1
-	find:=-1
-	for leftIndex<=rigIndex {
-		mid:=(leftIndex+rigIndex)/2
-		if target==nums[mid] {
-			find=mid
+	leftRes := -1
+	rigRes := -1
+	leftIndex := 0
+	rigIndex := len(nums) - 1
+	find := -1
+	for leftIndex <= rigIndex {
+		mid := (leftIndex + rigIndex) / 2
+		if target == nums[mid] {
+			find = mid
 			break
-		}else if target<nums[mid] {
-			rigIndex=mid-1
+		} else if target < nums[mid] {
+			rigIndex = mid - 1
 		} else {
-			leftIndex=mid+1
+			leftIndex = mid + 1
 		}
 	}
-	if find==-1 {
-		return []int{leftRes,rigRes}
+	if find == -1 {
+		return []int{leftRes, rigRes}
 	}
-	for i:=find;i>=0;i-- {
-		if nums[i]==target {
-			leftRes=i
+	for i := find; i >= 0; i-- {
+		if nums[i] == target {
+			leftRes = i
 		}
 	}
-	for i:=find;i<len(nums);i++ {
-		if nums[i]==target{
-			rigRes=i
+	for i := find; i < len(nums); i++ {
+		if nums[i] == target {
+			rigRes = i
 		}
 	}
-	return []int{leftRes,rigRes}
+	return []int{leftRes, rigRes}
 }
+
 //pid 41 使用了sort，复杂度是nlog(n)
 //pid 41 1放到nums[0] 2 nums[1] nums[i]==nums[nums[i]-1] 这种思想比较常见
 func firstMissingPositive(nums []int) int {
-	res:=1
+	res := 1
 	sort.Ints(nums)
-	for i:=0;i<len(nums); i++{
-		if nums[i]<=0 {
+	for i := 0; i < len(nums); i++ {
+		if nums[i] <= 0 {
 			continue
 		}
-		if res<nums[i] {
+		if res < nums[i] {
 			break
 		}
-		if nums[i]==res {
+		if nums[i] == res {
 			res++
 		}
 	}
 	return res
 }
+
+//pid 4 多悟
+func findMedianSortedArrays(nums1 []int, nums2 []int) float64 {
+	if len(nums1) > len(nums2) {
+		return findMedianSortedArrays(nums2, nums1)
+	}
+	m := len(nums1)
+	n := len(nums2)
+	left := 0
+	rig := m
+	tmp := (m + n + 1) / 2
+	for left <= rig {
+		i := (left + rig) / 2
+		j := tmp - i
+		if i > 0 && j < n && nums1[i-1] > nums2[j] {
+			rig = i - 1
+		} else if j > 0 && i < m && nums1[i] < nums2[j-1] {
+			left = i + 1
+		} else {
+			leftMax := 0
+			if i == 0 {
+				leftMax = nums2[j-1]
+			} else if j == 0 {
+				leftMax = nums1[i-1]
+			} else {
+				leftMax = max(nums1[i-1], nums2[j-1])
+			}
+			if (m+n)%2 == 1 {
+				return float64(leftMax)
+			}
+
+			rigMin := 0
+			if i == m {
+				rigMin = nums2[j]
+			} else if j == n {
+				rigMin = nums1[i]
+			} else {
+				rigMin = min(nums1[i], nums2[j])
+			}
+
+			return (float64(leftMax) + float64(rigMin)) / 2
+		}
+
+	}
+	return 0
+}
+
 //pid 81搜索旋转数组
 func search(nums []int, target int) bool {
-	if len(nums)<1 {
+	if len(nums) < 1 {
 		return false
 	}
-	left:=0
-	rig:=len(nums)-1
-	for left<=rig {
-		mid:=(left+rig)/2
-		if nums[mid]==target {
+	left := 0
+	rig := len(nums) - 1
+	for left <= rig {
+		mid := (left + rig) / 2
+		if nums[mid] == target {
 			return true
 		}
-		if nums[left]<=nums[mid] { //
-			if target<nums[mid] && target>=nums[left]{
-				rig=mid-1
+		if nums[left] <= nums[mid] { //
+			if target < nums[mid] && target >= nums[left] {
+				rig = mid - 1
 			} else {
-				left=mid+1
+				left = mid + 1
 			}
 		} else {
-			if target>nums[mid] && target<=nums[rig]{
-				left=mid+1
-			}else {
-				rig=mid-1
+			if target > nums[mid] && target <= nums[rig] {
+				left = mid + 1
+			} else {
+				rig = mid - 1
 			}
 		}
 	}
 	return false
 }
+
 //pid 80
 func removeDuplicates2(nums []int) int {
-	if len(nums)<3 {
+	if len(nums) < 3 {
 		return len(nums)
 	}
-	new:=1
-	for old:=2;old<len(nums);old++ {
-		if nums[old]==nums[new] && nums[old]==nums[new-1] {
+	new := 1
+	for old := 2; old < len(nums); old++ {
+		if nums[old] == nums[new] && nums[old] == nums[new-1] {
 			continue
 		}
-		nums[new+1]=nums[old]
+		nums[new+1] = nums[old]
 		new++
 	}
-	return new+1
+	return new + 1
 }
+
 //pid 54 螺旋矩阵
 func spiralOrder(matrix [][]int) []int {
-	if len(matrix)<1 {
+	if len(matrix) < 1 {
 		return []int{}
 	}
-	m:=len(matrix)
-	n:=len(matrix[0])
-	ret:=make([]int,m*n)
-	circle:=(min(m,n)+1)/2
-	index:=0
-	for i:=0;i<circle;i++ {
-		for j:=i;j<n-i;j++ {
-			ret[index]=matrix[i][j]
+	m := len(matrix)
+	n := len(matrix[0])
+	ret := make([]int, m*n)
+	circle := (min(m, n) + 1) / 2
+	index := 0
+	for i := 0; i < circle; i++ {
+		for j := i; j < n-i; j++ {
+			ret[index] = matrix[i][j]
 			index++
 		}
-		for j:=i+1;j<m-i&&index<m*n;j++ {
-			ret[index]=matrix[j][n-i-1]
+		for j := i + 1; j < m-i && index < m*n; j++ {
+			ret[index] = matrix[j][n-i-1]
 			index++
 		}
-		for j:=n-i-2;j>=i&&index<m*n;j-- {
-			ret[index]=matrix[m-i-1][j]
+		for j := n - i - 2; j >= i && index < m*n; j-- {
+			ret[index] = matrix[m-i-1][j]
 			index++
 		}
-		for j:=m-i-2;j>i&&index<m*n;j-- {
-			ret[index]=matrix[j][i]
+		for j := m - i - 2; j > i && index < m*n; j-- {
+			ret[index] = matrix[j][i]
 			index++
 		}
 	}
@@ -976,91 +1026,62 @@ func spiralOrder(matrix [][]int) []int {
 
 func myPow(x float64, n int) float64 {
 	var res float64
-	res=1
-	for i:=n;i!=0;i/=2 {
-		if i%2!=0 {
-			res=res*x
+	res = 1
+	for i := n; i != 0; i /= 2 {
+		if i%2 != 0 {
+			res = res * x
 		}
-		x=x*x
+		x = x * x
 	}
-	if n>0 {
+	if n > 0 {
 		return res
 	} else {
-		return 1/res
+		return 1 / res
 	}
-}
-
-func spiralOrder(matrix [][]int) []int {
-	if len(matrix)<1 {
-		return []int{}
-	}
-	m:=len(matrix)
-	n:=len(matrix[0])
-	ret:=make([]int,m*n)
-	circle:=(n+1)/2
-	index:=0
-	for i:=0;i<circle;i++ {
-		for j:=i;j<n-i;j++ {
-			ret[index]=matrix[i][j]
-			index++
-		}
-		for j:=i+1;j<m-i&&index<m*n;j++ {
-			ret[index]=matrix[j][n-i-1]
-			index++
-		}
-		for j:=n-i-2;j>=i&&index<m*n;j-- {
-			ret[index]=matrix[m-i-1][j]
-			index++
-		}
-		for j:=m-i-2;j>i&&index<m*n;j-- {
-			ret[index]=matrix[j][i]
-			index++
-		}
-	}
-	return ret
 }
 func generateMatrix(n int) [][]int {
-	if n<1 {
+	if n < 1 {
 		return [][]int{}
 	}
-	matrix:=make([][]int,n)
-	for i:=0;i<n;i++ {
-		matrix[i]=make([]int,n)
+	matrix := make([][]int, n)
+	for i := 0; i < n; i++ {
+		matrix[i] = make([]int, n)
 	}
-	circle:=(n+1)/2
-	index:=1
-	for i:=0;i<circle;i++ {
-		for j:=i;j<n-i;j++ {
-			matrix[i][j]=index
+	circle := (n + 1) / 2
+	index := 1
+	for i := 0; i < circle; i++ {
+		for j := i; j < n-i; j++ {
+			matrix[i][j] = index
 			index++
 		}
-		for j:=i+1;j<n-i;j++ {
-			matrix[j][n-i-1]=index
+		for j := i + 1; j < n-i; j++ {
+			matrix[j][n-i-1] = index
 			index++
 		}
-		for j:=n-i-2;j>=i&&index<=n*n;j-- {
-			matrix[n-i-1][j]=index
+		for j := n - i - 2; j >= i && index <= n*n; j-- {
+			matrix[n-i-1][j] = index
 			index++
 		}
-		for j:=n-i-2;j>i&&index<=n*n;j-- {
-			matrix[j][i]=index
+		for j := n - i - 2; j > i && index <= n*n; j-- {
+			matrix[j][i] = index
 			index++
 		}
 	}
 	return matrix
 }
+
 //pid 187不能有重复，注意边界 用bit节省空间
 func findRepeatedDnaSequences(s string) []string {
-	if len(s)<11 {
+	if len(s) < 11 {
 		return []string{}
 	}
-	hash:=make(map[string]int)
-	ret:=make([]string,0)
-	for i:=10;i<len(s)+1;i++ {
-		if hash[s[i-10:i]]==1 {
-			ret=append(ret,s[i-10:i])
+	hash := make(map[string]int)
+	ret := make([]string, 0)
+	for i := 10; i < len(s)+1; i++ {
+		if hash[s[i-10:i]] == 1 {
+			ret = append(ret, s[i-10:i])
 			hash[s[i-10:i]]++
-		}else {
+		} else {
 			hash[s[i-10:i]]++
 		}
 	}
@@ -1069,59 +1090,59 @@ func findRepeatedDnaSequences(s string) []string {
 
 //445 递归解法
 func addTwoNumbers2(l1 *ListNode, l2 *ListNode) *ListNode {
-	if l1==nil {
+	if l1 == nil {
 		return l2
 	}
-	if l2==nil {
+	if l2 == nil {
 		return l1
 	}
-	count1:=length(l1)
-	count2:=length(l2)
-	ret:=new(ListNode)
-	if count1>=count2 {
-		ret.Next=helper(l1,l2,count1-count2)
-	}else {
-		ret.Next=helper(l2,l1,count2-count1)
+	count1 := length(l1)
+	count2 := length(l2)
+	ret := new(ListNode)
+	if count1 >= count2 {
+		ret.Next = helper(l1, l2, count1-count2)
+	} else {
+		ret.Next = helper(l2, l1, count2-count1)
 	}
-	if ret.Next.Val>9 {
-		ret.Next.Val%=10
-		ret.Val=1
+	if ret.Next.Val > 9 {
+		ret.Next.Val %= 10
+		ret.Val = 1
 		return ret
 	}
 	return ret.Next
 }
 
 func length(root *ListNode) int {
-	ret:=0
-	if root==nil {
+	ret := 0
+	if root == nil {
 		return ret
 	}
 
-	for (root!=nil) {
+	for root != nil {
 		ret++
-		root=root.Next
+		root = root.Next
 	}
 	return ret
 }
 
-func helper(long *ListNode,short *ListNode,diff int) *ListNode{
-	if long==nil {
+func helper(long *ListNode, short *ListNode, diff int) *ListNode {
+	if long == nil {
 		return nil
 	}
-	res:=new(ListNode)
+	res := new(ListNode)
 	var post *ListNode
-	if diff>0 {
-		res.Val=long.Val
-		post=helper(long.Next,short,diff-1)
+	if diff > 0 {
+		res.Val = long.Val
+		post = helper(long.Next, short, diff-1)
 	} else {
-		res.Val=long.Val+short.Val
-		post=helper(long.Next,short.Next,diff)
+		res.Val = long.Val + short.Val
+		post = helper(long.Next, short.Next, diff)
 	}
-	if post!=nil &&post.Val>9{
-		post.Val%=10
+	if post != nil && post.Val > 9 {
+		post.Val %= 10
 		res.Val++
 	}
-	res.Next=post
+	res.Next = post
 	return res
 }
 //nid 31 找下一个全排列，有规律
