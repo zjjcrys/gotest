@@ -178,3 +178,40 @@ func enum(res *[]string, let map[byte]string, index []byte, digits string, pos i
 		index = append(index[:len(index)-1])
 	}
 }
+
+//topic 207 210 拓扑排序 bfs
+func canFinish(numCourses int, prerequisites [][]int) bool {
+	hash := make(map[int][]int) //记录所有点的出度
+	degree := make(map[int]int) //记录所有节点的入度数
+	ret := make([]int, 0)       //记录结果
+
+	for i := 0; i < len(prerequisites); i++ {
+		hash[prerequisites[i][1]] = append(hash[prerequisites[i][1]], prerequisites[i][0])
+		degree[prerequisites[i][0]]++
+	}
+	for i := 0; i < numCourses; i++ {
+		if degree[i] == 0 {
+			ret = append(ret, i) //存放入度为0的节点
+		}
+	}
+
+	if len(ret) < 1 {
+		return false
+	}
+	index := 0
+	for index < len(ret) {
+		num := ret[index]
+		for i := 0; i < len(hash[num]); i++ {
+			degree[hash[num][i]]--
+			if degree[hash[num][i]] == 0 {
+				ret = append(ret, hash[num][i])
+			}
+		}
+		index++
+	}
+	if index == numCourses {
+		return true
+	} else {
+		return false
+	}
+}

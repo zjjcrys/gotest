@@ -67,17 +67,6 @@ func landDFS(board *[][]byte, row int, col int) {
 	}
 }
 
-//207 检查图的闭环
-//使用邻接表的方式存储，bfs的方式查找
-type graph struct {
-	degree int   //入度
-	nodes  []int //
-}
-
-func canFinish(numCourses int, prerequisites [][]int) bool {
-	return true
-}
-
 //264 丑数2，小值推出大值，
 func nthUglyNumber(n int) int {
 	if n < 1 {
