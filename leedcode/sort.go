@@ -32,3 +32,26 @@ func mergeTwoLists(l1 *ListNode, l2 *ListNode) *ListNode {
 	}
 	return res
 }
+//快速排序
+func quickSort(arr *[]int,left int,rig int) {
+	if left<rig {
+		mid:=partition(arr,left,rig)
+		quickSort(arr,left,mid-1)
+		quickSort(arr,mid+1,rig)
+	}
+}
+func partition(arr *[]int,left int,rig int) int{
+	key:=(*arr)[left]
+	for left<rig {
+		for left<rig&&(*arr)[rig]>=key {
+			rig--
+		}
+		(*arr)[left]=(*arr)[rig]
+		for left<rig&&(*arr)[left]<=key {
+			left++
+		}
+		(*arr)[rig]=(*arr)[left]
+	}
+	(*arr)[left]=key
+	return left
+}

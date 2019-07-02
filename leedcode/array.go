@@ -1145,3 +1145,64 @@ func helper(long *ListNode, short *ListNode, diff int) *ListNode {
 	res.Next = post
 	return res
 }
+//nid 31 找下一个全排列，有规律
+func nextPermutation(nums []int)  {
+	if len(nums)<1 {
+		return
+	}
+	length:=len(nums)
+	index:=-1
+	for i:=length-2;i>=0;i-- {
+		if nums[i]<nums[i+1] {
+			index=i
+			break
+		}
+	}
+	rig:=-1
+	if index>=0 {
+		for i:=length-1;i>=0;i-- {
+			if nums[i]>nums[index] {
+				rig=i
+				break
+			}
+		}
+	}
+	if rig>0 &&index>0{//交换
+		tmp:=nums[index]
+		nums[index]=nums[rig]
+		nums[rig]=tmp
+	}
+	//转置
+	if index>=-1 {
+		left:=index+1
+		rig:=length-1
+		for left<rig {
+			tmp:=nums[left]
+			nums[left]=nums[rig]
+			nums[rig]=tmp
+			left++
+			rig--
+		}
+	}
+}
+//topid 55
+func canJump(nums []int) bool {
+	if len(nums)<1 {
+		return true
+	}
+	reach:=0
+	for i:=0;i<len(nums)-1;i++{
+		if reach>=i&&nums[i]+i>reach {
+			reach=nums[i]+i
+		}
+
+		if reach>=len(nums)-1 {
+			return true
+		}
+
+	}
+	if reach>=len(nums)-1 {
+		return true
+	}
+	return false
+}
