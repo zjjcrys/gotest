@@ -6,6 +6,8 @@ go test ./gosdk/user/userinfo_test.go 只输出测试结果
 go test -v ./gosdk/user/userinfo_test.go 输出测试结果和测试用例中的自定义输出
 go test -v ./gosdk/user/userinfo_test.go -test.run TestGetUserInfoByUid 只测试某个方法
 
+https://www.jianshu.com/p/dd69df14526d //go test 有缓存时进行清楚
+
 go gdb调试
 go build -gcflags "-N -l"
 go build -gcflags '-N -l' -o test-unoptimized test.go 去优化编译
