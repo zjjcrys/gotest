@@ -1,5 +1,7 @@
 package leedcode
 
+import "strconv"
+
 //130 先把边界以及和边界相连的剔除，
 func solve(board [][]byte) {
 	for i := 0; i < len(board); i++ {
@@ -94,3 +96,57 @@ func nthUglyNumber(n int) int {
 	return ret[n]
 }
 
+//topic 46 回溯也就是深度优先遍历
+func permute(nums []int) [][]int {
+	ret := make([][]int, 0)
+	if len(nums) < 1 {
+		return ret
+	}
+	backtrack(&ret, nums, 0)
+	return ret
+}
+
+func backtrack(ret *[][]int, tmp []int, start int) {
+	if start >= len(tmp) {
+		item := make([]int, len(tmp))
+		copy(item, tmp)
+		*ret = append(*ret, item)
+		return
+	}
+	for i := start; i < len(tmp); i++ {
+		swap(&tmp[start], &tmp[i])
+		backtrack(ret, tmp, start+1)
+		swap(&tmp[i], &tmp[start])
+	}
+}
+
+func swap(num1 *int, num2 *int) {
+	tmp := *num1
+	*num1 = *num2
+	*num2 = tmp
+}
+
+// topic 257
+func binaryTreePaths(root *TreeNode) []string {
+	ret := make([]string, 0)
+	if root == nil {
+		return ret
+	}
+
+	dfsNode(root, &ret, "")
+	return ret
+}
+
+func dfsNode(root *TreeNode, strArr *[]string, str string) {
+	if root != nil {
+		pathSB := str
+		pathSB += strconv.Itoa(root.Val)
+		if root.Left == nil && root.Right == nil {
+			*strArr = append(*strArr, pathSB)
+		} else {
+			pathSB += "->"
+			dfsNode(root.Left, strArr, pathSB)
+			dfsNode(root.Right, strArr, pathSB)
+		}
+	}
+}

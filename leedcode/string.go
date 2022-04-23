@@ -309,23 +309,24 @@ func lengthOfLongestSubstring(s string) int {
 	}
 	return maxLen
 }
+
 //topic 3 优化后
 func lengthOfLongestSubstring2(s string) int {
-	ret:=0
-	left:=0
-	rig:=0
-	hash:=make(map[uint8]int)
-	for rig=0;rig<len(s);rig++ {
-		if _,ok:=hash[s[rig]];ok &&hash[s[rig]]>=left{ //exist
-			if rig-left>ret {
-				ret=rig-left
+	ret := 0
+	left := 0
+	rig := 0
+	hash := make(map[uint8]int)
+	for rig = 0; rig < len(s); rig++ {
+		if _, ok := hash[s[rig]]; ok && hash[s[rig]] >= left { //exist
+			if rig-left > ret {
+				ret = rig - left
 			}
-			left=hash[s[rig]]+1
+			left = hash[s[rig]] + 1
 		}
-		hash[s[rig]]=rig
+		hash[s[rig]] = rig
 	}
-	if rig-left>ret {
-		ret=rig-left
+	if rig-left > ret {
+		ret = rig - left
 	}
 
 	return ret
@@ -451,51 +452,121 @@ func longestCommonPrefix(strs []string) string {
 	}
 	return string(ret)
 }
+
 //pid 38 每一个数是根据前一个数的读出来的
 func countAndSay(n int) string {
-	res:="1"
-	if n==1 {
+	res := "1"
+	if n == 1 {
 		return res
 	}
-	for i:=2;i<=n;i++ {
-		tmp:=""
-		count:=1
-		for j:=1;j< len(res);j++ {
-			if res[j]==res[j-1] {
+	for i := 2; i <= n; i++ {
+		tmp := ""
+		count := 1
+		for j := 1; j < len(res); j++ {
+			if res[j] == res[j-1] {
 				count++
 			} else {
-				tmp=tmp+strconv.Itoa(count)+string(res[j-1])
-				count=1
+				tmp = tmp + strconv.Itoa(count) + string(res[j-1])
+				count = 1
 			}
 		}
-		tmp=tmp+strconv.Itoa(count)+string(res[len(res)-1])
-		res=tmp
+		tmp = tmp + strconv.Itoa(count) + string(res[len(res)-1])
+		res = tmp
 	}
 	return res
 }
+
 //pid 58 先trim
 func lengthOfLastWord(s string) int {
-	if len(s) <1 {
+	if len(s) < 1 {
 		return 0
 	}
-	empty:=-1
-	for i:=len(s)-1;i>=0;i-- {
-		if s[i]!=' ' {
-			empty=i
+	empty := -1
+	for i := len(s) - 1; i >= 0; i-- {
+		if s[i] != ' ' {
+			empty = i
 			break
 		}
 	}
-	s=s[:empty+1]
-	length:=len(s)
-	empty=-1
-	for i:=len(s)-1;i>=0;i-- {
-		if s[i]==' ' {
-			empty=i
+	s = s[:empty+1]
+	length := len(s)
+	empty = -1
+	for i := len(s) - 1; i >= 0; i-- {
+		if s[i] == ' ' {
+			empty = i
 			break
 		}
 	}
-	if length-1-empty<0 {
+	if length-1-empty < 0 {
 		return 0
 	}
-	return length-1-empty
+	return length - 1 - empty
+}
+
+//topic 242
+func isAnagram(s string, t string) bool {
+	sArr := make(map[uint8]int)
+	tArr := make(map[uint8]int)
+	for i := 0; i < len(s); i++ {
+		sArr[s[i]]++
+	}
+	for i := 0; i < len(t); i++ {
+		tArr[t[i]]++
+	}
+	if len(sArr) != len(tArr) {
+		return false
+	}
+	for k, v := range sArr {
+		if tArr[k] != v {
+			return false
+		}
+	}
+	return true
+}
+
+//383
+func canConstruct(ransomNote string, magazine string) bool {
+	rArr := make(map[uint8]int)
+	mArr := make(map[uint8]int)
+	for i := 0; i < len(ransomNote); i++ {
+		rArr[ransomNote[i]]++
+	}
+	for i := 0; i < len(magazine); i++ {
+		mArr[magazine[i]]++
+	}
+	for k, v := range rArr {
+		if mArr[k] != v {
+			return false
+		}
+	}
+	return true
+}
+func judgeVowels(c byte) bool {
+	//if match, _ := regexp.MatchString("a|e|i|o|u|A|E|I|O|U", string(c)); match {
+	//	return true
+	//}
+	//return false
+	switch c {
+	case 'a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U':
+		break
+		return true
+	}
+	return false
+}
+
+//412 int stranslate to string
+func fizzBuzz(n int) []string {
+	ret := make([]string, n)
+	for i := 1; i <= n; i++ {
+		if i%3 == 0 && i%5 == 0 {
+			ret[i-1] = "FizzBuzz"
+		} else if i%3 == 0 {
+			ret[i-1] = "Fizz"
+		} else if i%5 == 0 {
+			ret[i-1] = "Buzz"
+		} else {
+			ret[i-1] = strconv.Itoa(i)
+		}
+	}
+	return ret
 }

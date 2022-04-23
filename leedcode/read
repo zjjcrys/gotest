@@ -75,3 +75,5 @@ max(Salary)
 
 //堆的使用 堆比较d[i] 从0开始d[2*i+1] d[2*i+2]
 如果是从1开始 d[2*i] d[2*i+1]
+
+//github submit command set

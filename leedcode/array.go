@@ -33,7 +33,6 @@ func Transpose(A [][]int) [][]int {
 	for i := 0; i < column; i++ {
 		ret[i] = make([]int, row)
 	}
-
 	for i := 0; i < row; i++ {
 		for j := 0; j < column; j++ {
 			ret[j][i] = A[i][j]
@@ -1145,64 +1144,148 @@ func helper(long *ListNode, short *ListNode, diff int) *ListNode {
 	res.Next = post
 	return res
 }
+
 //nid 31 找下一个全排列，有规律
-func nextPermutation(nums []int)  {
-	if len(nums)<1 {
+func nextPermutation(nums []int) {
+	if len(nums) < 1 {
 		return
 	}
-	length:=len(nums)
-	index:=-1
-	for i:=length-2;i>=0;i-- {
-		if nums[i]<nums[i+1] {
-			index=i
+	length := len(nums)
+	index := -1
+	for i := length - 2; i >= 0; i-- {
+		if nums[i] < nums[i+1] {
+			index = i
 			break
 		}
 	}
-	rig:=-1
-	if index>=0 {
-		for i:=length-1;i>=0;i-- {
-			if nums[i]>nums[index] {
-				rig=i
+	rig := -1
+	if index >= 0 {
+		for i := length - 1; i >= 0; i-- {
+			if nums[i] > nums[index] {
+				rig = i
 				break
 			}
 		}
 	}
-	if rig>0 &&index>0{//交换
-		tmp:=nums[index]
-		nums[index]=nums[rig]
-		nums[rig]=tmp
+	if rig > 0 && index > 0 { //交换
+		tmp := nums[index]
+		nums[index] = nums[rig]
+		nums[rig] = tmp
 	}
 	//转置
-	if index>=-1 {
-		left:=index+1
-		rig:=length-1
-		for left<rig {
-			tmp:=nums[left]
-			nums[left]=nums[rig]
-			nums[rig]=tmp
+	if index >= -1 {
+		left := index + 1
+		rig := length - 1
+		for left < rig {
+			tmp := nums[left]
+			nums[left] = nums[rig]
+			nums[rig] = tmp
 			left++
 			rig--
 		}
 	}
 }
+
 //topid 55
 func canJump(nums []int) bool {
-	if len(nums)<1 {
+	if len(nums) < 1 {
 		return true
 	}
-	reach:=0
-	for i:=0;i<len(nums)-1;i++{
-		if reach>=i&&nums[i]+i>reach {
-			reach=nums[i]+i
+	reach := 0
+	for i := 0; i < len(nums)-1; i++ {
+		if reach >= i && nums[i]+i > reach {
+			reach = nums[i] + i
 		}
 
-		if reach>=len(nums)-1 {
+		if reach >= len(nums)-1 {
 			return true
 		}
 
 	}
-	if reach>=len(nums)-1 {
+	if reach >= len(nums)-1 {
 		return true
 	}
 	return false
+}
+
+//topic 220 滑动窗口+桶排序
+func containsNearbyAlmostDuplicate(nums []int, k int, t int) bool {
+	if t < 0 {
+		return false
+	}
+	hash := make(map[int]int)
+	for i := 0; i < len(nums); i++ {
+		w := t + 1
+		bucket := getID(nums[i], w)
+		if _, ok := hash[bucket]; ok {
+			return true
+		}
+		if v, ok := hash[bucket+1]; ok {
+			if math.Abs(float64(v-nums[i])) <= float64(t) {
+				return true
+			}
+		}
+		if v, ok := hash[bucket-1]; ok {
+			if math.Abs(float64(v-nums[i])) <= float64(t) {
+				return true
+			}
+		}
+		hash[bucket] = nums[i]
+		if len(hash) > k {
+			delete(hash, getID(nums[i-k], w))
+		}
+	}
+	return false
+
+}
+
+func getID(num int, w int) int {
+	if num >= 0 {
+		return num / w
+	} else {
+		return (num+1)/w - 1
+	}
+}
+
+//topic 390 递归函数的推导理解
+func lastRemaining(n int) int {
+	return helper2(n, true)
+}
+func helper2(n int, flag bool) int {
+	if n == 1 {
+		return n
+	}
+	if flag {
+		return 2 * helper2(n/2, false)
+	} else {
+		return 2*helper2(n/2, true) - 1 + n%2 //相对于正向来说，要么删除相同，要么-1
+	}
+}
+
+//topic 223 不相交的情况很多,可以用一个公式解决
+func computeArea(A int, B int, C int, D int, E int, F int, G int, H int) int {
+	area := (C-A)*(D-B) + (G-E)*(H-F)
+	overlap := 0
+	if G < A || E > C || F > D || B > H {
+		return area
+	}
+	overlap = (min(G, C) - max(A, E)) * (min(D, H) - max(B, F))
+	return area - overlap
+}
+
+func hIndex(citations []int) int {
+	ret := len(citations)
+	for ret = len(citations); ret >= 0; ret-- {
+		count := 0
+		for j := 0; j < len(citations); j++ {
+			if citations[j] >= ret {
+				count++
+				break
+			}
+		}
+		if count >= ret {
+			break
+		}
+	}
+	return ret
 }

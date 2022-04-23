@@ -380,3 +380,26 @@ func isMatch3(s string, p string) bool {
 	}
 	return dp[m][n]
 }
+
+//topic 221 dp[i][j] 以ij结尾的长方形的长度
+func maximalSquare(matrix [][]byte) int {
+	ret := 0
+	if len(matrix) < 1 {
+		return ret
+	}
+	dp := make([][]int, len(matrix)+1)
+	for i := 0; i < len(dp); i++ {
+		dp[i] = make([]int, len(matrix[0])+1)
+	}
+	for i := 1; i <= len(matrix); i++ {
+		for j := 1; j <= len(matrix[0]); j++ {
+			if matrix[i-1][j-1] == '1' {
+				dp[i][j] = min(dp[i][j-1], min(dp[i-1][j-1], dp[i-1][j])) + 1
+				ret = max(ret, dp[i][j])
+			}
+		}
+	}
+	return ret * ret
+}
+
+//topid 279 遍历+dynamic

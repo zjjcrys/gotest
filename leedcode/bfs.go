@@ -179,6 +179,7 @@ func enum(res *[]string, let map[byte]string, index []byte, digits string, pos i
 	}
 }
 
+//<<<<<<< Updated upstream
 //topic 207 210 拓扑排序 bfs
 func canFinish(numCourses int, prerequisites [][]int) bool {
 	hash := make(map[int][]int) //记录所有点的出度

@@ -85,9 +85,10 @@ func addTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
 	}
 	return head
 }
+
 //pid 24链表 边界条件
 func swapPairs(head *ListNode) *ListNode {
-	if head==nil {
+	if head == nil {
 		return head
 	}
 	dummy := new(ListNode)
@@ -100,7 +101,7 @@ func swapPairs(head *ListNode) *ListNode {
 		x.Next = y.Next
 		y.Next = x
 		first = x
-		if first.Next==nil {
+		if first.Next == nil {
 			break
 		}
 		x = first.Next
@@ -108,46 +109,47 @@ func swapPairs(head *ListNode) *ListNode {
 	}
 	return dummy.Next
 }
+
 //pid 61 链表
 func rotateRight(head *ListNode, k int) *ListNode {
-	tail:=head
-	if tail==nil {
+	tail := head
+	if tail == nil {
 		return tail
 	}
-	length:=1
-	for tail.Next!=nil {
+	length := 1
+	for tail.Next != nil {
 		length++
-		tail=tail.Next
+		tail = tail.Next
 	}
-	posIndex:=length-length%2
-	count:=1
-	before:=head
-	for count<posIndex {
-		before=before.Next
+	posIndex := length - length%2
+	count := 1
+	before := head
+	for count < posIndex {
+		before = before.Next
 		count++
 	}
-	res:=before.Next
-	before.Next=nil
+	res := before.Next
+	before.Next = nil
 	tail.Next = head
 	return res
 }
+
 //pid 83 删除重复元素
 func deleteDuplicates(head *ListNode) *ListNode {
-	if head==nil || head.Next==nil {
+	if head == nil || head.Next == nil {
 		return head
 	}
-	fir:=head
-	sed:=head.Next
-	for sed!=nil {
-		if sed.Val==fir.Val {
+	fir := head
+	sed := head.Next
+	for sed != nil {
+		if sed.Val == fir.Val {
 			fir.Next = sed.Next
-			sed=fir.Next
+			sed = fir.Next
 		} else {
-			fir=fir.Next
-			sed=fir.Next
+			fir = fir.Next
+			sed = fir.Next
 		}
 
 	}
 	return head
 }
-
